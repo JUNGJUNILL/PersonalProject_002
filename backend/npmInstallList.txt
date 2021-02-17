@@ -1,0 +1,22 @@
+npm i express 
+npm i axios 
+npm i bcrypt
+npm i cookie-parser
+npm i express-session
+npm i dotenv
+npm i cors
+npm i helmet hpp --보안관련
+npm i morgan 
+npm i multer
+npm i nodemon
+npm install --save mariadb
+
+/*사용자 정보 관련*/
+
+npm i jsonwebtoken 
+npm i passport
+npm i passport-local --로컬로 로그인 
+npm i passport-kakao --카카오로 로그인 
+
+
+
