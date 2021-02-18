@@ -66,8 +66,8 @@ const AppLayOut = ({children}) =>{
             <li className="navli"><Link href={'/about'} ><a>About</a></Link></li>
             <li className="navli"><Link href={'/count'} ><a>Count</a></Link></li>
             */}
-            
-            <li className="navli"><Link href={'/posts/emp'} ><a>emp</a></Link></li>                
+        
+            <li className="navli"> <Link href={{pathname:'/posts/emp',query:{nowPage:1}}} ><a>emp</a></Link></li>                
             <li className="navli"><Link href={'/join'} ><a>회원가입</a></Link></li> 
             <li className="navli"><Link href={'/login'} ><a>로그인</a></Link></li>  
             
@@ -76,7 +76,7 @@ const AppLayOut = ({children}) =>{
             {userInfo &&  <li className="navli"><Link href={'/detailPage'} ><a>상세페이지</a></Link></li> }
             */}
             
-            {  <li className="navli"><Link href={{pathname:'/mainPosts_1001',query:{nowPage:1}}} ><a>메인1001</a></Link></li> }
+            {  <li className="navli"><Link href={{pathname:'/posts/mainPosts_1001',query:{nowPage:1}}} ><a>메인1001</a></Link></li> }
             
             {/* {userInfo &&   <li className="navli" onClick={logOut} >로그아웃</li>} */}
             

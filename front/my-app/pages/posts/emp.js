@@ -2,14 +2,15 @@ import React, { useCallback,useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import Pagenation from '../../util/Pagenation'
 import Router from 'next/router'; 
-import {Button} from 'antd'
+
+import wrapper from '../../store/configureStore';
 
 import 
     {EMP_LIST_REQUEST,} 
     from '../../reducers/emp'; 
 
-const Emp = () =>{
-
+const Emp = ({pages,group}) =>{
+    console.log(pages,group); 
 
     const dispatch = useDispatch(); 
     const {emplist}    = useSelector(state => state.emp); 
@@ -32,18 +33,18 @@ const Emp = () =>{
 
 
 
-    useEffect(()=>{
+    // useEffect(()=>{
 
-        dispatch({
-            type:EMP_LIST_REQUEST, 
-            data:{name:'',
-                  job:'',
-                  currentPage:nowPage,
-                  maxPage:postsPerPage
-                 }, 
-        })
+    //     dispatch({
+    //         type:EMP_LIST_REQUEST, 
+    //         data:{name:'',
+    //               job:'',
+    //               currentPage:nowPage,
+    //               maxPage:postsPerPage
+    //              }, 
+    //     })
 
-      },[]); 
+    //   },[]); 
 
 
      // const currentPosts = emplist.slice(indexOfFirstPost,indexOfLastPost); //0~5
@@ -56,30 +57,53 @@ const Emp = () =>{
                 5~10
       3 페이지 = 3*5=15 
       */
+    const pagenate =useCallback((pageNumber, groupPageArray)=>{
+        setNowPage(pageNumber); 
+        nowGroupPageArray.length=0; 
+        setNowGroupPageArray(nowGroupPageArray.concat(groupPageArray));
+        const indexOfLastPost = pageNumber * postsPerPage;   
+        const indexOfFirstPost = indexOfLastPost - postsPerPage;  
+
+    dispatch({
+        type:EMP_LIST_REQUEST, 
+        data:{name:'',
+            job:'',
+            currentPage:indexOfFirstPost,
+            maxPage:postsPerPage
+            }, 
+    });
+
+
+    },[nowPage,nowGroupPageArray]); 
+
+
+  //01.페이지 첫 로드시.. 
+  //02.상세 정보 본 후 뒤로 가기 눌렀을 경우 
+  //03.페이지 이동 후 뒤로가기 눌렀을 경우
+  useEffect(()=>{
+
+    //초기에 groupPage 만큼 배열을 생생해 주어야 한다. 
+    let pageArray =Array.from({length: groupPage}, (v, i) => i);
+
+
+    //groupPage 페이지 그룹 변경 시 로직 (5에서 ▶ 눌렀을 때)
+    if((group % groupPage === 0 )){
+            pageArray.length=0; 
+
+              for(let i=group; i<group+groupPage; i++){
+                pageArray.push(i); 
+
+              }
+         }
+
+        pagenate(parseInt(pages),pageArray);
     
+},[pages]); 
 
-      const pagenate =useCallback((pageNumber, groupPageArray)=>{
-          setNowPage(pageNumber); 
-          nowGroupPageArray.length=0; 
-          setNowGroupPageArray(nowGroupPageArray.concat(groupPageArray));
-          const indexOfLastPost = pageNumber * postsPerPage;   
-          const indexOfFirstPost = indexOfLastPost - postsPerPage;  
-
-        dispatch({
-          type:EMP_LIST_REQUEST, 
-          data:{name:'',
-                job:'',
-                currentPage:indexOfFirstPost,
-                maxPage:postsPerPage
-               }, 
-      });
-
-
-      },[nowPage,nowGroupPageArray]); 
                                  
                               
     return (
-        <>
+        <div>
 
         
          <div className='divTable' style={{marginTop:'3%'}}>
@@ -109,9 +133,21 @@ const Emp = () =>{
             </div>
          </div>
         <Pagenation pagenate={pagenate} dataLength={emplist.length} postsPerPage={postsPerPage} nowPage={nowPage} groupPage={groupPage} groupPageArray={nowGroupPageArray} />
-        </>
+        </div>
     )
 
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  
+    console.log('context.query=>' , context.query);
+    const pages = context.query.nowPage; 
+    const group  =0;//parseInt(context.query.group);
+    return {
+        props: {pages,group}, // will be passed to the page component as props
+      } 
+
+  });
+
 
 export default Emp;

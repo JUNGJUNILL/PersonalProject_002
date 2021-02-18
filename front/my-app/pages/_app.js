@@ -7,21 +7,21 @@ import AppLayout from '../components/AppLayout';
 import wrapper from '../store/configureStore';
 
 
-const Personal_Project02 = ({ Component }) => (
+const Personal_Project02 = ({ Component, pageProps }) => (
     <div>
       <Head>
         <meta charSet="utf-8" />
         <title>Personal_Project02</title>
       </Head>
       <AppLayout>
-         <Component />
+         <Component {...pageProps} />
       </AppLayout>
     </div>
   );
 
 
   export function reportWebVitals(metric) {
-    console.log('metric===>' , metric);
+    //console.log('metric===>' , metric);
   }
 
   
