@@ -22,7 +22,7 @@ from '../reducers/emp';
 //EMP SELECT
 //-----------------------------------------------------------------------------------
 function APIempList(data){
-    return axios.post('/emp',{data})
+    return axios.get(`/emp?name=${data.name}&job=${data.job}&currentPage=${data.currentPage}&maxPage=${data.maxPage}`)
 }
 
 function* sagaEmpList(action){

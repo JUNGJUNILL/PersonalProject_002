@@ -85,10 +85,16 @@ router.post('/ckeditor',upload.single('upload'),(req,res,next)=>{
 
 
 //게시글 SELECT
-router.post('/', async (req,res,next)=>{
+router.get('/', async (req,res,next)=>{
     
     try{    
-        const {name , job, currentPage, maxPage}= req.body.data;   
+       // const {name , job, currentPage, maxPage}= req.body.data;   
+
+        const name  =req.query.name;
+        const job   =req.query.job;
+        const currentPage = req.query.currentPage;
+        const maxPage = req.query.maxPage; 
+
         let stringQuery = 'CALL US_SELECT_emp'; 
             stringQuery =stringQuery.concat(`('${name}',`);
             stringQuery =stringQuery.concat(`'${job}',`); 
