@@ -56,7 +56,7 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
           }
     });
 
-  },[]);
+  },[nickName,postFlag,postId]);
 
   //게시글 좋아요, 실어요 버튼
   const postLikeBtn = useCallback((likeFlag)=>{
