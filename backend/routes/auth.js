@@ -7,6 +7,7 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 
+
 //유저정보 유지 
 router.get('/',vertifiyToken,(req,res)=>{
     try{
@@ -105,12 +106,12 @@ router.post('/login',async (req,res,next)=>{
 
             try{
                 const {userId , password} = req.body.data;  
-                console.log(userId,password); 
 
                 let loginType='local'; 
                 let stringQuery = 'CALL US_SELECT_getUserInfo'; 
                 stringQuery = stringQuery.concat(`('${userId}',`);
                 stringQuery = stringQuery.concat(`'${loginType}')`);
+                console.log(stringQuery); 
                 const user = await pool.query(stringQuery); 
                 if(!user){
                     return res.status(401).json({
