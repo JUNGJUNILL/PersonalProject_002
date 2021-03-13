@@ -143,7 +143,6 @@ function* sagaTest(action){
     try{
 
         const result = yield call(APItest,action.data); 
-        console.log('sagasagates' , result.data); 
         yield  put({
               type:TEST_SUCCESS, 
               data:result.data,

@@ -13,10 +13,10 @@ import
 from '../../reducers/mainPosts_1001'; 
 
 
-// import 
-//     {LOAD_USER_REQUEST,
-//     } 
-// from '../reducers/auth'; 
+import 
+    {LOAD_USER_REQUEST,
+    } 
+from '../../reducers/auth'; 
 import { useDispatch, useSelector } from 'react-redux';
 import isEmpty from '../../util/isEmpty';
 import custumDateFormat from  '../../util/custumDateFormat';
@@ -29,12 +29,12 @@ const mainPosts_1001 = ({pages,group})=>{
   const dispatch         = useDispatch(); 
   const router           = useRouter(); 
   const {mainPosts_1001} = useSelector((state)=>state.mainPosts_1001); 
-  //const {userInfo}       = useSelector((state)=>state.auth);
+  const {userInfo}       = useSelector((state)=>state.auth);
 
 
   /*-------------------------------------------페이징 처리 로직 start-------------------------------------------------------*/
   const [nowPage,setNowPage] = useState(0);                       //현재 페이지
-  const [postsPerPage] = useState(10);                             //한 페이지당 list 수 
+  const [postsPerPage] = useState(5);                             //한 페이지당 list 수 
   const [groupPage , setGroupPage] = useState(5);                 //페이징 그룹 당 수  1~5 , 6~10 , 11~15 ... 5의 배수만 입력가능 
   const [nowGroupPageArray,setNowGroupPageArray] =useState([]);   //현재 페이징 그룹 배열
   
@@ -119,7 +119,7 @@ const mainPosts_1001 = ({pages,group})=>{
       </div>
 
 
-   <Button type="primary" onClick={gotoEdit} style={{marginTop:"1%",display:"block",float:"right"}}>글쓰기</Button>
+  <Button type="primary" onClick={gotoEdit} style={{marginTop:"1%",display:"block",float:"right"}}>글쓰기</Button> 
   
       <Pagenation pagenate={pagenate} dataLength={mainPosts_1001.length} postsPerPage={postsPerPage} nowPage={nowPage} groupPage={groupPage} groupPageArray={nowGroupPageArray} />
 
@@ -129,9 +129,11 @@ const mainPosts_1001 = ({pages,group})=>{
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
   
-  console.log('context.query=>' , context.query);
+
+
   const pages = context.query.nowPage; 
-  const group  =0;//parseInt(context.query.group);
+  const group  =  context.query.group ? parseInt(context.query.group) : 0;   
+                                            // 0;//parseInt(context.query.group);
   return {
       props: {pages,group}, // will be passed to the page component as props
     } 

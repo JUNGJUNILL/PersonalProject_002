@@ -75,6 +75,7 @@ ul.pagination li a:hover:not(.active) {background-color: #ddd;}
 	width: 100%;
 	margin: 0 auto;
   text-align: center;
+
   
 }
 /*pagination
@@ -236,8 +237,17 @@ img {
 
 
 
-/*footer css*/
+/*footer css
+  footerSub와 footer의 height는 동일해야 한다.
+*/
+.footerSub {
+  background-color: "transparent";
+  width: 100%;
+  height: 30px;
+} 
+
 .footer {
+ /* position: sticky;*/
   position: fixed;
   left: 0;
   bottom: 0;
@@ -245,6 +255,7 @@ img {
   background-color: red;
   color: white;
   text-align: center;
+  height: 30px;
 
 }
 

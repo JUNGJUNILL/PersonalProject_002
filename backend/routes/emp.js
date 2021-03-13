@@ -5,6 +5,8 @@ const {isLoggedIn,vertifiyToken} = require('./middlewares');
 const multer =require('multer'); 
 const path   =require('path');
 const fs = require('fs'); 
+var requestIp = require('request-ip');
+const data =require('../jsonData/dealerInfoData.js'); 
 
 
 
@@ -157,16 +159,14 @@ router.post('/empInsert', async (req,res,next)=>{
 router.post('/select', async (req,res,next)=>{
 
   try{
-      const postFlag = "1001"; 
-      let stringQuery = 'SELECT postid, content,title FROM mainPosts'; 
-          // stringQuery =stringQuery.concat(`('${title}',`);
-          // stringQuery =stringQuery.concat(`'${content}',`); 
-          // stringQuery =stringQuery.concat(`'${userNickName}',`); 
-          // stringQuery =stringQuery.concat(`'${postFlag}')`);
-          
 
-      const test = await pool.query(stringQuery); 
-      return res.json(test); 
+      //모듈 시스템에 대해 계략적으로 배움 : https://uroa.tistory.com/57
+      const dealerInfoList = data.dealerInfoList(); 
+
+      console.log('IP==>',requestIp.getClientIp(req)); 
+      const ip = requestIp.getClientIp(req).split(':')[3]; 
+ 
+      return res.json({dealerInfoList ,ip }); 
 
 
   }catch(e){

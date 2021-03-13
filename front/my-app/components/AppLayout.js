@@ -7,7 +7,15 @@ import {UnorderedListOutlined,HomeOutlined } from '@ant-design/icons'
 import Router from 'next/router'; 
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux';
+import 
+{LOGOUT_REQUEST
+} 
+from '../reducers/auth'; 
 
+import 
+{TEST_REQUEST02
+} 
+from '../reducers/testReducer'; 
 
 import wrapper from '../store/configureStore';
 
@@ -16,8 +24,8 @@ const AppLayOut = ({children}) =>{
     const dummyList = ['카테코리01','카테코리02','카테코리03','카테코리04','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05','카테코리05']; 
    
     const dispatch = useDispatch(); 
-    //const {userInfo, joined} = useSelector((state)=>state.auth); 
-/*
+    const {userInfo, joined} = useSelector((state)=>state.auth); 
+
     useEffect(()=>{
         //로그 아웃 후 메인 페이지로 이동
         if(!userInfo){
@@ -35,7 +43,7 @@ const AppLayOut = ({children}) =>{
         });
 
     },[userInfo]); 
-  */
+ 
     const [isClicked,setIsClicked] = useState(false); 
     const inputEl = useRef(null); 
   
@@ -56,6 +64,8 @@ const AppLayOut = ({children}) =>{
     return(
 
         <Row>
+
+
         <Col xs={24}>
         <ul className="navul">
     
@@ -67,9 +77,12 @@ const AppLayOut = ({children}) =>{
             <li className="navli"><Link href={'/count'} ><a>Count</a></Link></li>
             */}
         
-            <li className="navli"> <Link href={{pathname:'/posts/emp',query:{nowPage:1}}} ><a>emp</a></Link></li>                
-            <li className="navli"><Link href={'/join'} ><a>회원가입</a></Link></li> 
-            <li className="navli"><Link href={'/login'} ><a>로그인</a></Link></li>  
+            <li className="navli"> <Link href={{pathname:'/posts/emp',query:{nowPage:1}}} ><a>emp</a></Link></li>  
+            <li className="navli"> <Link href={{pathname:'/posts/dealerInfo',query:{nowPage:1}}} ><a>유통사정보</a></Link></li>                              
+            {!userInfo && <li className="navli"><Link href={'/auth/join'} ><a>회원가입</a></Link></li> }
+            {!userInfo && <li className="navli"><Link href={'/auth/login'} ><a>로그인</a></Link></li>  }
+            
+
             
             {/*
             {userInfo &&  <li className="navli"><Link href={'/userInfo'} ><a>회원정보</a></Link></li> }
@@ -78,7 +91,7 @@ const AppLayOut = ({children}) =>{
             
             {  <li className="navli"><Link href={{pathname:'/posts/mainPosts_1001',query:{nowPage:1}}} ><a>메인1001</a></Link></li> }
             
-            {/* {userInfo &&   <li className="navli" onClick={logOut} >로그아웃</li>} */}
+            {userInfo &&   <li className="navli" onClick={logOut} >로그아웃</li>} 
             
             {/* 
             리엑트 테스트용
@@ -94,22 +107,17 @@ const AppLayOut = ({children}) =>{
         
     <div className="sidenav" style={{width : isClicked? "40%":"0"}}>
        <a className="closebtn" onClick={closeCatergoriList}>x</a>
-       {dummyList.map((v,i)=>(
-           
-       <Link href={'/about'} key={i}>
+       {dummyList.map((v,i)=>(      
+        <Link href={'/about'} key={i}>
             <a onClick={closeCatergoriList} >{v}</a>
         </Link>
-
        ))}
     </div>          
-         {children}
+    {children}
+    </Col>
 
-     
-
-        </Col>
-        <div className="footer">
-        광고입니다.
-       </div>
+    <div className="footerSub"></div>
+    <div className="footer">광고입니다.</div>
     </Row> 
      
         ); 

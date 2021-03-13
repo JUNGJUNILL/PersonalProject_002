@@ -12,6 +12,7 @@ const Personal_Project02 = ({ Component, pageProps }) => (
       <Head>
         <meta charSet="utf-8" />
         <title>Personal_Project02</title>
+        <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
       </Head>
       <AppLayout>
          <Component {...pageProps} />

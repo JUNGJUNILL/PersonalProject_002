@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken'); 
+var requestIp = require('request-ip');
 
 exports.isLoggedIn = (req,res,next)=>{
 
@@ -57,7 +58,9 @@ exports.vertifiyToken = (req,res,next) =>{
     //쿠키의 value값은 사용자 외부 아이피
     if(Object.keys(req.cookies).length === 0){ 
 
-      const ip = req.headers['x-forwarded-for'] ||  req.connection.remoteAddress;
+    
+      const ip = requestIp.getClientIp(req).split(':')[3]; 
+                 //::ffff:192.168.111.100 
       console.log('ip==>', ip); 
       res.cookie(process.env.NOTLOGIN_COOKIE, ip ,
                                                   {httpOnly:true,

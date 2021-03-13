@@ -7,7 +7,7 @@ import axios from 'axios';
 import mainPosts_1001Saga from './mainPosts_1001Saga';
 import testSaga from './testSaga';
 import empListSaga from './empListSaga'; 
-
+import authSaga from './authSaga'; 
 
 import { backUrl } from '../config/config';
 
@@ -20,5 +20,6 @@ export default function* rootSaga() {
     yield all([ fork(mainPosts_1001Saga), 
                 fork(testSaga), 
                 fork(empListSaga), 
+                fork(authSaga), 
     ]);
   }
