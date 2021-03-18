@@ -7,6 +7,7 @@ const path   =require('path');
 const fs = require('fs'); 
 var requestIp = require('request-ip');
 const data =require('../jsonData/dealerInfoData.js'); 
+const fetch = require('node-fetch'); 
 
 
 
@@ -159,15 +160,26 @@ router.post('/empInsert', async (req,res,next)=>{
 router.post('/select', async (req,res,next)=>{
 
   try{
+    
+    const {clientIp} = req.body.data; 
+    const clientIpInfoJSON = await fetch(`http://ip-api.com/json/${clientIp}`)
+                                                                        .then(result=>result.json()) //json() promise를 반환하므로... 
+                                                                        .catch((error)=>{  
+                                                                            console.log(error); 
+                                                                        }); 
+
+     console.log(JSON.stringify(clientIpInfoJSON)); 
+     const {regionName,city} = clientIpInfoJSON; 
+
 
       //모듈 시스템에 대해 계략적으로 배움 : https://uroa.tistory.com/57
       const dealerInfoList = data.dealerInfoList(); 
 
-      console.log('IP==>',requestIp.getClientIp(req)); 
+      //console.log('IP==>',requestIp.getClientIp(req)); 
       const ip = requestIp.getClientIp(req).split(':')[3]; 
  
-      return res.json({dealerInfoList ,ip }); 
-
+      //return res.json({dealerInfoList ,ip }); 
+      return res.json(dealerInfoList); 
 
   }catch(e){
       console.log(e); 

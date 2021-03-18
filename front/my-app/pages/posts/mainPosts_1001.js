@@ -130,7 +130,7 @@ const mainPosts_1001 = ({pages,group})=>{
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
   
 
-
+  console.log('첫 로드시 SSR 아니냐?'); 
   const pages = context.query.nowPage; 
   const group  =  context.query.group ? parseInt(context.query.group) : 0;   
                                             // 0;//parseInt(context.query.group);

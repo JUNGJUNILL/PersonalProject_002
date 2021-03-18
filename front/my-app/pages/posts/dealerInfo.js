@@ -1,16 +1,22 @@
-import React , {useState,useEffect,useCallback}from 'react'
+import React , {useState,useEffect,useCallback,createRef}from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import Select from "react-select";
 import Pagenation from '../../util/Pagenation'
 import Router from 'next/router'; 
 
+
 import wrapper from '../../store/configureStore';
+import {localDataList}from './localData'; 
 
 import 
     {TEST_REQUEST02,} 
-    from '../../reducers/testReducer'; 
+from '../../reducers/testReducer'; 
 
-const DealerInfo = ({pages,group}) =>{
+const DealerInfo = ({pages,group,clientIp}) =>{
   const dispatch         = useDispatch(); 
+  const selectRef = createRef(); 
+  const subSelectRef = createRef(); 
+ 
   const {testArray02}      = useSelector((state)=>state.testReducer); 
 
                                  //store의 state를 불러오는 hook 
@@ -24,7 +30,7 @@ const [nowGroupPageArray,setNowGroupPageArray] =useState([]);   //현재 페이�
 
 
 const pagenate =useCallback((pageNumber, groupPageArray)=>{
-
+  console.log('localValue===>',localValue); 
   setNowPage(pageNumber); 
 
   nowGroupPageArray.length=0; 
@@ -36,6 +42,7 @@ const pagenate =useCallback((pageNumber, groupPageArray)=>{
 
    dispatch({
       type:TEST_REQUEST02, 
+      data:{clientIp:clientIp},
   });
 
 },[nowPage,nowGroupPageArray]); 
@@ -67,16 +74,72 @@ useEffect(()=>{
 /*-------------------------------------------페이징 처리 로직   end-------------------------------------------------------*/
 
 
+  const [localValue,setLocalVale] = useState(null); 
+  const [subLocalValue,setSubLocalValue] = useState(null); 
+  const onChangeLocalValue =(e)=>{
+    setLocalVale(e.target.value)
+      alert(e.target.value); 
+  }
 
 
 
-                                 
-                              
+
+
+  const test = () =>{
+    setLocalVale(selectRef.current.value); 
+    setSubLocalValue(subSelectRef.current.value)
+    alert(localValue," : ",subLocalValue); 
+  } 
+
+  const onChangeLocal = () =>{
+    try{
+    alert(selectRef.current.value); 
+  
+    let abc = localDataList.filter((v,i,array)=>{
+      if(v.city!==v.cityCode && v.region === parseInt(selectRef.current.value.split(':')[1],10)){
+          return array;
+      }
+}); 
+
+console.log('abc==>', abc); 
+
+    setArray([...abc]); 
+  }catch(e){
+    alert(e); 
+  }
+  }
+
+  const mainLocal = localDataList.filter((v,i,array)=>{
+            if(v.city===v.cityCode){
+                return array;
+            }
+      }); 
+
+
+ const subLocal = localDataList.filter((v,i,array)=>{
+                if(v.city!==v.cityCode && v.region === clientIp){
+                    return array;
+                }
+        }); 
+
+  const [array,setArray] = useState(subLocal); 
     return (
         <div>
-
-        
+          <input type="text" value={localValue}/>
+          <input type="button"value="button" onClick={test}></input>
+          {clientIp?clientIp:'으잌?'}
          <div className='divTable' style={{marginTop:'3%'}}>
+            <select ref={selectRef} onChange={onChangeLocal}>
+              {mainLocal.map((v)=>(              
+                  <option value={v.cityCode+':'+v.region} selected={clientIp===v.region}>{v.regionNameHangul}</option>
+              ))}
+            </select>
+             <select ref={subSelectRef} >
+            {array.map((v)=>(
+              //<option value={v.value} selected={v.value===clientIp.split(":")[1]}>{v.label}</option>
+              <option value={v.cityCode}>{v.regionNameHangul}</option>
+            ))}
+            </select>
            <div className='divTableBody'>
            <div className='divTableRow'>
                      <div className='divTableCell'>코드</div>
@@ -114,12 +177,12 @@ useEffect(()=>{
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  console.log('ssr 아니냐?'); 
+  const clientIp =42;//context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
   const pages = context.query.nowPage; 
   const group  =  context.query.group ? parseInt(context.query.group) : 0;   
                                             // 0;//parseInt(context.query.group);
   return {
-      props: {pages,group}, // will be passed to the page component as props
+      props: {pages,group,clientIp}, // will be passed to the page component as props
     } 
 
   });

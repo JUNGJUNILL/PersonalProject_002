@@ -1,10 +1,8 @@
-var createError = require('http-errors');
 const express = require('express'); 
 const cors = require('cors'); 
 const morgan = require('morgan'); 
 const cookieParser = require('cookie-parser'); 
-const passport = require('passport'); 
-const expressSession = require('express-session'); 
+
 const dotenv = require('dotenv');
 const passportConfig = require('./passport'); 
 const app= express(); 
