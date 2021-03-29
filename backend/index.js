@@ -24,6 +24,7 @@ const mainPosts_1001APIRouter = require('./routes/mainPosts_1001');
 app.use(morgan('dev')); 
 app.use('/',express.static('images')); 
 app.use('/',express.static('uploads')); 
+
 app.use(express.json()); 
 app.use(express.urlencoded({extended : true})); //form 데이터 처리 
 

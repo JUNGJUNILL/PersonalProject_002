@@ -24,6 +24,10 @@ export const SAVE_IP_ADRESS_SUCCESS = 'SAVE_IP_ADRESS_SUCCESS';
 export const SAVE_IP_ADRESS_FAILURE = 'SAVE_IP_ADRESS_FAILURE'; 
 
 
+//파일 업로드
+export const FILE_UPLOAD_REQUEST = 'FILE_UPLOAD_REQUEST';
+export const FILE_UPLOAD_SUCCESS = 'FILE_UPLOAD_SUCCESS';
+export const FILE_UPLOAD_FAILURE = 'FILE_UPLOAD_FAILURE'; 
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
 
@@ -80,6 +84,21 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
 
         case SAVE_IP_ADRESS_FAILURE: {
             draft.clientIp=`can't not found ip adress`;
+            break; 
+        }
+//--------------------------------------------------------------------
+
+//파일 업로드
+//--------------------------------------------------------------------
+        case FILE_UPLOAD_REQUEST: {      
+            break; 
+        }
+
+        case FILE_UPLOAD_SUCCESS: {
+            break; 
+        }
+
+        case FILE_UPLOAD_FAILURE: {
             break; 
         }
 //--------------------------------------------------------------------

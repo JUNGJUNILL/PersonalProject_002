@@ -34,6 +34,26 @@ const upload = multer({
     limits: { fileSize: 20 * 1024 * 1024 },
   });
 
+const upload2 = multer({
+  storage: multer.diskStorage({
+
+    destination(req,file,done){
+      done(null,'uploads');
+    },
+
+
+    filename(req,file,done){
+      const ext = path.extname(file.originalname); //확장자명
+      const basename = path.basename(file.originalname, ext);// 파일명
+      done(null,basename+'_'+new Date().getTime() + ext);
+    } 
+
+  }),
+
+  //limits : {fileSize:20 *1024 *1025} //20MB
+
+});
+
     //일반 이미지 업로드 
     //이미지 업로드
                                //none
@@ -83,6 +103,19 @@ router.post('/ckeditor',upload.single('upload'),(req,res,next)=>{
 
     }
 
+}); 
+
+router.post('/upload',upload2.single('files'),async(req,res,next)=>{
+
+  try{  
+    console.log(req.files); 
+    
+    return res.json('hello'); 
+
+  }catch(e){
+    console.error(e); 
+    next(e); 
+  }
 }); 
   
 
@@ -160,26 +193,36 @@ router.post('/empInsert', async (req,res,next)=>{
 router.post('/select', async (req,res,next)=>{
 
   try{
-    
-    const {clientIp} = req.body.data; 
-    const clientIpInfoJSON = await fetch(`http://ip-api.com/json/${clientIp}`)
-                                                                        .then(result=>result.json()) //json() promise를 반환하므로... 
-                                                                        .catch((error)=>{  
-                                                                            console.log(error); 
-                                                                        }); 
 
-     console.log(JSON.stringify(clientIpInfoJSON)); 
-     const {regionName,city} = clientIpInfoJSON; 
-
-
-      //모듈 시스템에 대해 계략적으로 배움 : https://uroa.tistory.com/57
-      const dealerInfoList = data.dealerInfoList(); 
-
-      //console.log('IP==>',requestIp.getClientIp(req)); 
-      const ip = requestIp.getClientIp(req).split(':')[3]; 
+    const {clientIp,init} = req.body.data; 
  
-      //return res.json({dealerInfoList ,ip }); 
+     //모듈 시스템에 대해 계략적으로 배움 : https://uroa.tistory.com/57
+     //실제 데이터
+     let dealerInfoList;
+
+    if(init){ //첫 로드시 
+
+      const request = await fetch(`https://ipinfo.io/${clientIp}?token=${process.env.IPTOKEN}`)
+      const json = await request.json(); 
+
+      dealerInfoList =  data.dealerInfoList().filter((v,i,array)=>{
+        if(v.region === json.region){
+          return array;
+        }
+      }); 
+
+    return res.json(dealerInfoList); 
+
+    }else{ //select 박스 변경 시 
+
+       dealerInfoList =  data.dealerInfoList().filter((v,i,array)=>{
+        if(v.region === clientIp){
+          return array;
+        }
+      });          
+
       return res.json(dealerInfoList); 
+    }
 
   }catch(e){
       console.log(e); 

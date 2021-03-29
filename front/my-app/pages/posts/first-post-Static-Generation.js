@@ -20,7 +20,8 @@ const fetch =require('node-fetch');
       </ul>
       )
 }
-
+// getStaticProps : 언제 접속해도 데이터가 바뀔 일이 없으면, 웬만하면 안바뀌는 애들(블로그 게시글, 뉴스, 이벤트 화면 등), 
+//                  정적 html 파일로 뽑아준다. 그러므로 서버 부하를 좀 줄일 수 있다. , 대부분의 경우 getStaticProps를 쓰기가 힘들다. 
 export async function getStaticProps() {
 
     console.log('빠락스 비어'); 

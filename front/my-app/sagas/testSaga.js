@@ -14,6 +14,9 @@ import {
     SAVE_IP_ADRESS_SUCCESS,
     SAVE_IP_ADRESS_FAILURE,
 
+    FILE_UPLOAD_REQUEST,
+    FILE_UPLOAD_SUCCESS,
+    FILE_UPLOAD_FAILURE,
 } from '../reducers/testReducer';
 
 
@@ -102,7 +105,33 @@ function* saveClientIpAdress(action){
             error:e,
         })
     }
-} 
+}
+
+function fileUploadAPI(data){
+    return axios.post('/emp/upload',data); 
+}
+
+function* fileUpload(action){
+    try{
+        console.log('sagas====>', action.data); 
+        const result = yield call(fileUploadAPI,action.data);
+        console.log('result.data==>' , result.data); 
+        yield put({
+            type:FILE_UPLOAD_SUCCESS,
+            data: result.data, 
+        })
+
+
+    }catch(e){
+
+        console.error('saga error===>' , e); 
+        yield put({
+            type:FILE_UPLOAD_FAILURE,
+            error:e.response.error, 
+        }); 
+    }
+
+}
 
 
 function* watchTest() {
@@ -122,6 +151,11 @@ function* watchSaveClientIpAdress(){
     yield takeLatest(SAVE_IP_ADRESS_REQUEST,saveClientIpAdress);
 }
 
+function* watchFileUpload(){
+
+    yield takeLatest(FILE_UPLOAD_REQUEST,fileUpload);
+}
+
 
 
 export default function* testSaga() {
@@ -129,5 +163,6 @@ export default function* testSaga() {
                 fork(watchTest),
                 fork(watchTest02), 
                 fork(watchSaveClientIpAdress), 
+                fork(watchFileUpload), 
               ]); 
 }

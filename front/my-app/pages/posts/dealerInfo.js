@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Select from "react-select";
 import Pagenation from '../../util/Pagenation'
 import Router from 'next/router'; 
+import axios from 'axios';
 
 
 import wrapper from '../../store/configureStore';
@@ -12,7 +13,7 @@ import
     {TEST_REQUEST02,} 
 from '../../reducers/testReducer'; 
 
-const DealerInfo = ({pages,group,clientIp}) =>{
+const DealerInfo = ({pages,group,clientIp,clientRegion}) =>{
   const dispatch         = useDispatch(); 
   const selectRef = createRef(); 
   const subSelectRef = createRef(); 
@@ -42,7 +43,7 @@ const pagenate =useCallback((pageNumber, groupPageArray)=>{
 
    dispatch({
       type:TEST_REQUEST02, 
-      data:{clientIp:clientIp},
+      data:{clientIp:clientIp,init:'initload'},
   });
 
 },[nowPage,nowGroupPageArray]); 
@@ -76,72 +77,82 @@ useEffect(()=>{
 
   const [localValue,setLocalVale] = useState(null); 
   const [subLocalValue,setSubLocalValue] = useState(null); 
-  const onChangeLocalValue =(e)=>{
-    setLocalVale(e.target.value)
-      alert(e.target.value); 
-  }
+  const [changeMainLocal , setChangeMainLocal] = useState(false);
 
+  //광역시, 도 list
+  const mainLocal = localDataList.filter((v,i,array)=>{
 
-
-
-
-  const test = () =>{
-    setLocalVale(selectRef.current.value); 
-    setSubLocalValue(subSelectRef.current.value)
-    alert(localValue," : ",subLocalValue); 
-  } 
-
-  const onChangeLocal = () =>{
-    try{
-    alert(selectRef.current.value); 
-  
-    let abc = localDataList.filter((v,i,array)=>{
-      if(v.city!==v.cityCode && v.region === parseInt(selectRef.current.value.split(':')[1],10)){
+      if(v.city===v.cityCode){
           return array;
       }
-}); 
 
-console.log('abc==>', abc); 
+  }); 
 
-    setArray([...abc]); 
-  }catch(e){
-    alert(e); 
-  }
-  }
+  //광역시, 도 별 하위 지역 list
+  const subLocal = localDataList.filter((v,i,array)=>{
 
-  const mainLocal = localDataList.filter((v,i,array)=>{
-            if(v.city===v.cityCode){
-                return array;
-            }
+        if(v.regionName===clientRegion){
+            return array;
+        }
+
+    }); 
+
+    
+  const [array,setArray] = useState(subLocal); 
+
+
+  const onChangeMainLocal = () =>{
+      try{
+
+      let changeSubLocalList = localDataList.filter((v,i,array)=>{
+          if(v.regionName === selectRef.current.value){
+              return array;
+          }
       }); 
 
+      setArray([...changeSubLocalList]); 
+      
+      dispatch({
+        type:TEST_REQUEST02, 
+        data:{clientIp:selectRef.current.value,},
+    });
 
- const subLocal = localDataList.filter((v,i,array)=>{
-                if(v.city!==v.cityCode && v.region === clientIp){
-                    return array;
-                }
-        }); 
+    }catch(e){
+      alert(e); 
+    }
+  }
 
-  const [array,setArray] = useState(subLocal); 
+
+
     return (
         <div>
           <input type="text" value={localValue}/>
-          <input type="button"value="button" onClick={test}></input>
-          {clientIp?clientIp:'으잌?'}
+        {clientRegion}
          <div className='divTable' style={{marginTop:'3%'}}>
-            <select ref={selectRef} onChange={onChangeLocal}>
+            <select ref={selectRef} onChange={onChangeMainLocal}>
               {mainLocal.map((v)=>(              
-                  <option value={v.cityCode+':'+v.region} selected={clientIp===v.region}>{v.regionNameHangul}</option>
+                  <option value={v.regionName} selected={clientRegion===v.regionName}>{v.regionNameHangul}</option>
               ))}
             </select>
              <select ref={subSelectRef} >
-            {array.map((v)=>(
-              //<option value={v.value} selected={v.value===clientIp.split(":")[1]}>{v.label}</option>
-              <option value={v.cityCode}>{v.regionNameHangul}</option>
+            {/*
+             {array.map((v)=>(
+           
+              <option value={v.cityCode} selected={clientIp.regionName===clientIp.city || changeMainLocal
+                                                   ? v.cityCode.split('_')[1]==='0'                             //도별 인구가 가장 많은 시 자동 선택
+                                                   : v.city.toUpperCase()===clientIp.city.toUpperCase()}        //ip에서 가져 온 시, 구 자동 선택                                      
+                                                   >       
+                                                   {v.regionNameHangul}
+              </option>
             ))}
+             */}
+             {array.map((v)=>(
+                <option value={v.cityCode}>{v.regionNameHangul}</option>
+              ))}
             </select>
            <div className='divTableBody'>
            <div className='divTableRow'>
+                    <div className='divTableCell'>No</div>
                      <div className='divTableCell'>코드</div>
                      <div className='divTableCell'>유통사명</div>
                      {/*
@@ -156,6 +167,7 @@ console.log('abc==>', abc);
            </div>
             {testArray02 && testArray02.map((v,i)=>(
                 <div className='divTableRow' key={i}>
+                    <div className='divTableCell'>{i+1}</div>
                      <div className='divTableCell'>{v.dealerCode}</div>
                      <div className='divTableCell'>{v.infoName}</div>
                      {/*
@@ -177,12 +189,18 @@ console.log('abc==>', abc);
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  const clientIp =42;//context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
+
+
+  //{region:28,regionName:'Incheon',city:'Incheon'};//
+  const clientIp ='211.43.131.61';//context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
+ 
+  const apiResult =await axios.get(`https://ipinfo.io/${clientIp}?token=ad6b444b39c31e`); 
+  const clientRegion = apiResult.data.region; 
   const pages = context.query.nowPage; 
   const group  =  context.query.group ? parseInt(context.query.group) : 0;   
                                             // 0;//parseInt(context.query.group);
   return {
-      props: {pages,group,clientIp}, // will be passed to the page component as props
+      props: {pages,group,clientIp,clientRegion}, // will be passed to the page component as props
     } 
 
   });

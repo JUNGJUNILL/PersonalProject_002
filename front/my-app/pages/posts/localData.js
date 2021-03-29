@@ -1,4 +1,5 @@
-export const localDataList =[{"regionNameHangul":"서울시","city":"Seoul","cityCode":"Seoul","regionName":"Seoul","region":11},
+export const localDataList =[
+{"regionNameHangul":"서울시","city":"Seoul","cityCode":"Seoul","regionName":"Seoul","region":11},
 {"regionNameHangul":"강남구","city":"Gangnam-gu","cityCode":"11_0","regionName":"Seoul","region":11},
 {"regionNameHangul":"강동구","city":"Gangdong-gu","cityCode":"11_1","regionName":"Seoul","region":11},
 {"regionNameHangul":"강북구","city":"Gangbuk-gu","cityCode":"11_2","regionName":"Seoul","region":11},
@@ -118,7 +119,7 @@ export const localDataList =[{"regionNameHangul":"서울시","city":"Seoul","cit
 {"regionNameHangul":"전주시","city":"Jeonju-si","cityCode":"45_0","regionName":"Jeollabuk-do","region":45},
 {"regionNameHangul":"정읍시","city":"Jeongeup-si","cityCode":"45_13","regionName":"Jeollabuk-do","region":45},
 {"regionNameHangul":"진안군","city":"Jinan-gun","cityCode":"45_14","regionName":"Jeollabuk-do","region":45},
-{"regionNameHangul":"전라남도","city":"Jeollanam-do","cityCode":"","regionName":"Jeollanam-do","region":46},
+{"regionNameHangul":"전라남도","city":"Jeollanam-do","cityCode":"Jeollanam-do","regionName":"Jeollanam-do","region":46},
 {"regionNameHangul":"강진군","city":"Gangjin-gun","cityCode":"46_1","regionName":"Jeollanam-do","region":46},
 {"regionNameHangul":"고흥군","city":"Goheung-gun","cityCode":"46_2","regionName":"Jeollanam-do","region":46},
 {"regionNameHangul":"곡성군","city":"Gokseong-gun","cityCode":"46_3","regionName":"Jeollanam-do","region":46},
