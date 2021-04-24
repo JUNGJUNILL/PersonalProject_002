@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors'); 
 const morgan = require('morgan'); 
 const cookieParser = require('cookie-parser'); 
+const path = require('path'); 
 
 const dotenv = require('dotenv');
 const passportConfig = require('./passport'); 
@@ -20,9 +21,10 @@ const empAPIRouter = require('./routes/emp');
 const authAPIRouter = require('./routes/auth'); 
 const mainPosts_1001APIRouter = require('./routes/mainPosts_1001'); 
 
-
 app.use(morgan('dev')); 
-app.use('/',express.static('images')); 
+
+//정적 파일 load
+app.use('/',express.static(path.join(__dirname,'images'))); 
 app.use('/',express.static('uploads')); 
 
 app.use(express.json()); 

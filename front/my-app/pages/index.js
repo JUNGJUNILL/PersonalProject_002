@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Link from 'next/link'
 import React,{useEffect}from 'react'
 import { useDispatch, useSelector } from 'react-redux';
+import axios from  'axios'; 
 import 
     {SAVE_IP_ADRESS_REQUEST,} 
     from '../reducers/testReducer'; 
@@ -9,7 +10,7 @@ import
 import AppLayout from '../components/AppLayout';
 import wrapper from '../store/configureStore';
 
-const Home =({ip})=>{
+const Home =({ip,result})=>{
 
   const dispatch = useDispatch(); 
   //const {clientIp} = useSelector((state)=>state.testReducer);
@@ -21,10 +22,9 @@ const Home =({ip})=>{
   //   });
 
   // },[]); 
-  console.log('clientIp==>',ip); 
+  console.log('clientIp==>',ip,'    result=>', result); 
   return (
     <div>
-      {ip ? ip : '으잌?'}
      <Link href="/posts/first-post-Server-side"><a>go to first-page-Server-side</a></Link>
      <br/>
      <Link href="/posts/first-post-Static-Generation"><a>go to first-page-Static</a></Link>
@@ -43,9 +43,11 @@ const Home =({ip})=>{
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
   
-  const ip =context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
+  const ip ='1111';//context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
+  //const apiResult =await axios.get(`https://ipinfo.io/${ip}?token=ad6b444b39c31e`);
+   const result ='Seoul'; //apiResult.data.region; 
   return {
-    props:{ip},
+    props:{ip,result},
   }
 
 });

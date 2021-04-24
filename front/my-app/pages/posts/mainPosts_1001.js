@@ -110,7 +110,7 @@ const mainPosts_1001 = ({pages,group})=>{
             {mainPosts_1001.map((v,i)=>(
                <div className='divTableRow' onClick={()=>gotoDetail(v.postId,v.userNickName,'1001',nowPage)}>
                   <div className='divTableCell'><div className="divImageCell"><img src={v.content.indexOf(`<img src=`) !== -1 ? v.content.substr(v.content.indexOf(`<img src=`)+`<img src=`.length ,v.content.substring(v.content.indexOf(`<img src=`)+`<img src=`.length).indexOf('>')).split(`"`).join(''):`http://captainryan.gonetis.com:3095/noimages.gif`} /></div></div>
-                  <div className="divTableCell" ><Link href={{pathname:'/posts/detailPage' , query:{postId:v.postId,nickName:v.userNickName,postFlag:'1001'}}} ><a>{isEmpty(v.title)} [{v.commentCount}]</a></Link><br/>
+                  <div className="divTableCell" ><Link href={{pathname:'/posts/detailPage' , query:{postId:v.postId,nickName:v.userNickName,postFlag:'1001'}}} ><a><font style={{fontSize:'2.5vh'}}>{isEmpty(v.title)} [{v.commentCount}]</font></a></Link><br/>
                   <LikeTwoTone twoToneColor="#1ba640"/> : {v.good} <DislikeTwoTone twoToneColor="#1ba640"/> : {v.bad}  <EyeOutlined color="red"/> : {v.hit}<br/>
                   <UserOutlined /> {isEmpty(v.userNickName)}   <FieldTimeOutlined /> {custumDateFormat(v.createdDate)}<br />
                   </div>

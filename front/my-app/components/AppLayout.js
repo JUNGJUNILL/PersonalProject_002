@@ -7,15 +7,7 @@ import {UnorderedListOutlined,HomeOutlined } from '@ant-design/icons'
 import Router from 'next/router'; 
 import Link from 'next/link'
 import { useDispatch, useSelector } from 'react-redux';
-import 
-{LOGOUT_REQUEST
-} 
-from '../reducers/auth'; 
 
-import 
-{TEST_REQUEST02
-} 
-from '../reducers/testReducer'; 
 
 import wrapper from '../store/configureStore';
 
@@ -78,7 +70,7 @@ const AppLayOut = ({children}) =>{
             */}
         
             <li className="navli"> <Link href={{pathname:'/posts/emp',query:{nowPage:1}}} ><a>emp</a></Link></li>  
-            <li className="navli"> <Link href={{pathname:'/posts/dealerInfo',query:{nowPage:1}}} ><a>유통사정보</a></Link></li> 
+            <li className="navli"> <Link href={'/posts/dealerInfo'}><a>유통사정보</a></Link></li> 
             <li className="navli"> <Link href={{pathname:'/posts/fileupload'}} ><a>파일업로드</a></Link></li>                              
             {!userInfo && <li className="navli"><Link href={'/auth/join'} ><a>회원가입</a></Link></li> }
             {!userInfo && <li className="navli"><Link href={'/auth/login'} ><a>로그인</a></Link></li>  }

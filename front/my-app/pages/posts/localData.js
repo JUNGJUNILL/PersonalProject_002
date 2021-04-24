@@ -1,5 +1,5 @@
 export const localDataList =[
-{"regionNameHangul":"서울시","city":"Seoul","cityCode":"Seoul","regionName":"Seoul","region":11},
+{"regionNameHangul":"서울특별시","city":"Seoul","cityCode":"Seoul","regionName":"Seoul","region":11},
 {"regionNameHangul":"강남구","city":"Gangnam-gu","cityCode":"11_0","regionName":"Seoul","region":11},
 {"regionNameHangul":"강동구","city":"Gangdong-gu","cityCode":"11_1","regionName":"Seoul","region":11},
 {"regionNameHangul":"강북구","city":"Gangbuk-gu","cityCode":"11_2","regionName":"Seoul","region":11},
@@ -96,7 +96,7 @@ export const localDataList =[
 {"regionNameHangul":"부여군","city":"Buyeo-gun","cityCode":"44_7","regionName":"Chungcheongnam-do","region":44},
 {"regionNameHangul":"서산시","city":"Seosan-si","cityCode":"44_8","regionName":"Chungcheongnam-do","region":44},
 {"regionNameHangul":"서천군","city":"Seocheon-gun","cityCode":"44_9","regionName":"Chungcheongnam-do","region":44},
-{"regionNameHangul":"세종시","city":"Sejong","cityCode":"Sejong","regionName":"Sejong","region":50},
+{"regionNameHangul":"세종특별자치시","city":"Sejong","cityCode":"Sejong","regionName":"Sejong","region":50},
 {"regionNameHangul":"아산시","city":"Asan-si","cityCode":"44_10","regionName":"Chungcheongnam-do","region":44},
 {"regionNameHangul":"예산군","city":"Yesan-gun","cityCode":"44_11","regionName":"Chungcheongnam-do","region":44},
 {"regionNameHangul":"천안시","city":"Cheonan-si","cityCode":"44_0","regionName":"Chungcheongnam-do","region":44},
@@ -189,6 +189,7 @@ export const localDataList =[
 {"regionNameHangul":"함안군","city":"Haman-gun","cityCode":"48_15","regionName":"Gyeongsangnam-do","region":48},
 {"regionNameHangul":"함양군","city":"Hamyang-gun","cityCode":"48_16","regionName":"Gyeongsangnam-do","region":48},
 {"regionNameHangul":"합천군","city":"Hapcheon-gun","cityCode":"48_17","regionName":"Gyeongsangnam-do","region":48},
-{"regionNameHangul":"제주도","city":"Jeju","cityCode":"Jeju","regionName":"Jeju","region":49},
+{"regionNameHangul":"제주특별자치도","city":"Jeju","cityCode":"Jeju","regionName":"Jeju","region":49},
 {"regionNameHangul":"서귀포시","city":"Seogwipo-si","cityCode":"49_1","regionName":"Jeju","region":49},
-{"regionNameHangul":"제주시","city":"Jeju-si","cityCode":"49_0","regionName":"Jeju","region":49}];; 
+{"regionNameHangul":"제주시","city":"Jeju-si","cityCode":"49_0","regionName":"Jeju","region":49},
+{"regionNameHangul":"대전광역시","city":"Daejeon","cityCode":"Daejeon","regionName":"Daejeon","region":30},]; 

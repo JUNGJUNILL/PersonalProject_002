@@ -1,83 +1,34 @@
 import React , {useState,useEffect,useCallback,createRef}from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import Select from "react-select";
-import Pagenation from '../../util/Pagenation'
-import Router from 'next/router'; 
-import axios from 'axios';
-
+import { Select ,Button} from 'antd';
+const { Option } = Select;
 
 import wrapper from '../../store/configureStore';
 import {localDataList}from './localData'; 
+import axios from 'axios';
 
 import 
     {TEST_REQUEST02,} 
 from '../../reducers/testReducer'; 
 
-const DealerInfo = ({pages,group,clientIp,clientRegion}) =>{
+import DealerinfoModalComponent from '../../components/DealerinfoModalComponent'
+
+
+const DealerInfo = ({clientIp,clientRegion}) =>{
+
   const dispatch         = useDispatch(); 
-  const selectRef = createRef(); 
-  const subSelectRef = createRef(); 
- 
   const {testArray02}      = useSelector((state)=>state.testReducer); 
 
-                                 //store의 state를 불러오는 hook 
-                                 //store의 state 중에서 count의 state를 불러온다.
+  useEffect(()=>{
 
-/*-------------------------------------------페이징 처리 로직 start-------------------------------------------------------*/
-const [nowPage,setNowPage] = useState(0);                       //현재 페이지
-const [postsPerPage] = useState(5);                             //한 페이지당 list 수 
-const [groupPage , setGroupPage] = useState(5);                 //페이징 그룹 당 수  1~5 , 6~10 , 11~15 ... 5의 배수만 입력가능 
-const [nowGroupPageArray,setNowGroupPageArray] =useState([]);   //현재 페이징 그룹 배열
-
-
-const pagenate =useCallback((pageNumber, groupPageArray)=>{
-  console.log('localValue===>',localValue); 
-  setNowPage(pageNumber); 
-
-  nowGroupPageArray.length=0; 
-
-  setNowGroupPageArray(nowGroupPageArray.concat(groupPageArray));
-
-  const indexOfLastPost = pageNumber * postsPerPage;   
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;  
-
-   dispatch({
+    dispatch({
       type:TEST_REQUEST02, 
       data:{clientIp:clientIp,init:'initload'},
-  });
-
-},[nowPage,nowGroupPageArray]); 
-
+    });
     
-//01.페이지 첫 로드시.. 
-//02.상세 정보 본 후 뒤로 가기 눌렀을 경우 
-//03.페이지 이동 후 뒤로가기 눌렀을 경우
-useEffect(()=>{
-
-    //초기에 groupPage 만큼 배열을 생생해 주어야 한다. 
-    let pageArray =Array.from({length: groupPage}, (v, i) => i);
+  },[]); 
 
 
-    //groupPage 페이지 그룹 변경 시 로직 (5에서 ▶ 눌렀을 때)
-    if((group % groupPage === 0 )){
-            pageArray.length=0; 
-
-              for(let i=group; i<group+groupPage; i++){
-                pageArray.push(i); 
-
-              }
-         }
-
-        pagenate(parseInt(pages),pageArray);
-    
-},[pages]); 
-
-/*-------------------------------------------페이징 처리 로직   end-------------------------------------------------------*/
-
-
-  const [localValue,setLocalVale] = useState(null); 
-  const [subLocalValue,setSubLocalValue] = useState(null); 
-  const [changeMainLocal , setChangeMainLocal] = useState(false);
 
   //광역시, 도 list
   const mainLocal = localDataList.filter((v,i,array)=>{
@@ -87,34 +38,32 @@ useEffect(()=>{
       }
 
   }); 
+  const [subLocalValue,setSubLocalValue] = useState(mainLocal[0].cityCode); 
 
   //광역시, 도 별 하위 지역 list
-  const subLocal = localDataList.filter((v,i,array)=>{
-
+  const array = localDataList.filter((v,i,array)=>{
         if(v.regionName===clientRegion){
             return array;
         }
-
     }); 
+  const [subLocal,setSubLocal] = useState(array); 
 
-    
-  const [array,setArray] = useState(subLocal); 
-
-
-  const onChangeMainLocal = () =>{
+  //지역 분류 select 변경 시 action
+  const onChangeMainLocal = (value) =>{
       try{
-
+   
       let changeSubLocalList = localDataList.filter((v,i,array)=>{
-          if(v.regionName === selectRef.current.value){
+          if(v.regionName === value){
               return array;
           }
       }); 
 
-      setArray([...changeSubLocalList]); 
+      setSubLocalValue(changeSubLocalList[0].cityCode); 
+      setSubLocal([...changeSubLocalList]); 
       
       dispatch({
         type:TEST_REQUEST02, 
-        data:{clientIp:selectRef.current.value,},
+        data:{clientIp:value,},
     });
 
     }catch(e){
@@ -122,67 +71,111 @@ useEffect(()=>{
     }
   }
 
+  //하위 지역 select 변경 시 action 
+  const onChangeSubLocal = (value) =>{
+    setSubLocalValue(value); 
+  }
+
+
+  const [boleanValue ,setBooleanValue]= useState(false); 
+  const [getDealerInfo,setDealerInfo] = useState(null); 
+
+   const onClickDetailInfo =(i)=>() =>{
+
+    setDealerInfo({...testArray02[i]});
+    setBooleanValue((value)=>!value);; 
+
+  }
+
+  //자식 컴포넌트의 변수를 부모 컴포넌트로 가져오는 예시
+  //https://velog.io/@breeeeze/react-%EC%9E%90%EC%8B%9D%EC%97%90%EC%84%9C-%EB%B6%80%EB%AA%A8%EB%A1%9C-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EC%A0%84%EB%8B%AC%ED%95%98%EA%B8%B0
+  const chageBooleanValue = () =>{
+    setBooleanValue((prev)=>!prev); 
+  }
+
 
 
     return (
         <div>
-          <input type="text" value={localValue}/>
-        {clientRegion}
-         <div className='divTable' style={{marginTop:'3%'}}>
-            <select ref={selectRef} onChange={onChangeMainLocal}>
+        {/*상세정보 모달 화면*/}
+        {boleanValue && <DealerinfoModalComponent 
+                          visible={boleanValue} 
+                          dealerinfo={getDealerInfo}
+                          func={chageBooleanValue}
+                          
+                        />
+        }
+        
+        <div style={{width:'100%',textAlign:"center"}}>
+            <font style={{fontFamily:'Hanna',fontSize:'5vh'}}>우리동네 식자재 유통사</font> <br/>
+            <font style={{fontFamily:'jua',fontSize:'2vh',opacity:'0.6'}}>(매출액이 높은 순으로 정렬)</font>
+        </div>
+      
+        <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+             <font style={{fontFamily:'jua',fontSize:'2.2vh'}}>지역선택 :</font> &nbsp; 
+            {/*광역 시 도 */}
+             <Select defaultValue={clientRegion} onChange={onChangeMainLocal} style={{width:'40%'}}>
               {mainLocal.map((v)=>(              
-                  <option value={v.regionName} selected={clientRegion===v.regionName}>{v.regionNameHangul}</option>
+                <Option value={v.regionName} >{v.regionNameHangul}</Option>
               ))}
-            </select>
-             <select ref={subSelectRef} >
-            {/*
-             {array.map((v)=>(
-           
-              <option value={v.cityCode} selected={clientIp.regionName===clientIp.city || changeMainLocal
-                                                   ? v.cityCode.split('_')[1]==='0'                             //도별 인구가 가장 많은 시 자동 선택
-                                                   : v.city.toUpperCase()===clientIp.city.toUpperCase()}        //ip에서 가져 온 시, 구 자동 선택                                      
-                                                   >       
-                                                   {v.regionNameHangul}
-              </option>
-            ))}
-             */}
-             {array.map((v)=>(
-                <option value={v.cityCode}>{v.regionNameHangul}</option>
+             </Select>
+            
+            {/*광역 시 도 하위 도시
+            <Select value={subLocalValue} onChange={onChangeSubLocal}>
+              {subLocal.map((v)=>(
+                <Option value={v.cityCode}>{v.regionNameHangul}</Option>
               ))}
-            </select>
-           <div className='divTableBody'>
-           <div className='divTableRow'>
-                    <div className='divTableCell'>No</div>
-                     <div className='divTableCell'>코드</div>
-                     <div className='divTableCell'>유통사명</div>
-                     {/*
-                     <div className='divTableCell'>사원명</div>
-                     <div className='divTableCell'>직책</div>
-                     <div className='divTableCell'>매니져번호</div>
-                     <div className='divTableCell'>입사일</div>
-                     <div className='divTableCell'>급여</div>
-                     <div className='divTableCell'>인센</div>
-                     <div className='divTableCell'>부서번호</div>
-                    */}
-           </div>
+            </Select>
+            */}
+        </div>
+
+        {/*데이터 리스트*/}
+         <div className='divTable' style={{marginTop:'3%'}}>
+               
             {testArray02 && testArray02.map((v,i)=>(
                 <div className='divTableRow' key={i}>
-                    <div className='divTableCell'>{i+1}</div>
-                     <div className='divTableCell'>{v.dealerCode}</div>
-                     <div className='divTableCell'>{v.infoName}</div>
-                     {/*
-                     <div className='divTableCell'>{v.JOB}</div>
-                     <div className='divTableCell'>{v.MGR}</div>
-                     <div className='divTableCell'>{v.HIREDATE}</div>
-                     <div className='divTableCell'>{v.SAL}</div>
-                     <div className='divTableCell'>{v.COMM}</div>
-                     <div className='divTableCell'>{v.DEPTNO}</div>
-                     */}
+                    <div className='divTableCell'><div className="divImageCell"><img src={i<=2?`http://captainryan.gonetis.com:3095/${i===0?'1':i===1?'2':'3'}.jpg`:'http://captainryan.gonetis.com:3095/Vegetable.gif'}/></div></div>
+                    
+                    <div className='divTableCell' >
+                      <font color={i<=2 ? 'red' : ''} style={{fontFamily:'Hanna',fontSize:'3vh'}}>
+                      &nbsp;{v.infoName}
+                      </font>
+                      <br/>
+                      <font style={{fontFamily:'Hanna',fontSize:'2.2vh'}}>
+                      &nbsp;&nbsp;업태:&nbsp;
+                      </font>
+                        <font style={{fontFamily:'jua',fontSize:'2vh'}}>{v.item}</font>
+                      <br/>
+                      <font style={{fontFamily:'Hanna',fontSize:'2.2vh'}}>
+                      &nbsp;&nbsp;업종:&nbsp;
+                      </font>
+                      <font style={{fontFamily:'jua',fontSize:'2vh'}}>{v.status}</font>
+                    </div>
+
+                     <div className='divTableCell' style={{paddingRight:'0.7%',fontFamily:'jua'}}><Button type="primary" onClick={onClickDetailInfo(i)} style={{borderRadius:'8px'}}>상세정보</Button></div>
                 </div>
             ))}
             </div>
-         </div>
-         <Pagenation pagenate={pagenate} dataLength={testArray02.length} postsPerPage={postsPerPage} nowPage={nowPage} groupPage={groupPage} groupPageArray={nowGroupPageArray} />
+      
+
+         {/* 
+         {testArray02 && testArray02.map((v,i)=>(
+            <Card>
+            <Card.Meta avatar={<Avatar src='https://media.istockphoto.com/vectors/gold-medal-icon-for-first-place-with-red-ribbons-for-the-winner-vector-id1160210757'/>}
+                       title={v.infoName}
+                     
+            />
+            &nbsp;
+            <pre>
+              업태 :{v.item}
+            &nbsp;
+            <b>업종 : {v.status}</b>
+            </pre>
+         
+            </Card>        
+              
+          ))}
+        */}
         </div>
     )
 
@@ -192,15 +185,13 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
 
 
   //{region:28,regionName:'Incheon',city:'Incheon'};//
-  const clientIp ='211.43.131.61';//context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
- 
+  //const clientIp ='211.43.131.61';//context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
+  const clientIp =context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
   const apiResult =await axios.get(`https://ipinfo.io/${clientIp}?token=ad6b444b39c31e`); 
   const clientRegion = apiResult.data.region; 
-  const pages = context.query.nowPage; 
-  const group  =  context.query.group ? parseInt(context.query.group) : 0;   
-                                            // 0;//parseInt(context.query.group);
+
   return {
-      props: {pages,group,clientIp,clientRegion}, // will be passed to the page component as props
+      props: {clientIp,clientRegion}, // will be passed to the page component as props
     } 
 
   });
