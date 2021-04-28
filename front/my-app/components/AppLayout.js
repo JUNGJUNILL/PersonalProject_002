@@ -61,19 +61,21 @@ const AppLayOut = ({children}) =>{
         <Col xs={24}>
         <ul className="navul">
     
-            <li className="navli" onClick={catergoriList}><UnorderedListOutlined /></li>
+            
             <li className="navli"><HomeOutlined onClick={gotoHome} /></li>    
  
             {/*
             <li className="navli"><Link href={'/about'} ><a>About</a></Link></li>
             <li className="navli"><Link href={'/count'} ><a>Count</a></Link></li>
             */}
-        
+            {/* 
             <li className="navli"> <Link href={{pathname:'/posts/emp',query:{nowPage:1}}} ><a>emp</a></Link></li>  
             <li className="navli"> <Link href={'/posts/dealerInfo'}><a>유통사정보</a></Link></li> 
-            <li className="navli"> <Link href={{pathname:'/posts/fileupload'}} ><a>파일업로드</a></Link></li>                              
+            <li className="navli"> <Link href={{pathname:'/posts/fileupload'}} ><a>파일업로드</a></Link></li>      
+            */}                
+            {!userInfo && <li className="navli"><Link href={'/auth/login'} ><a>로그인</a></Link></li>  }        
             {!userInfo && <li className="navli"><Link href={'/auth/join'} ><a>회원가입</a></Link></li> }
-            {!userInfo && <li className="navli"><Link href={'/auth/login'} ><a>로그인</a></Link></li>  }
+
             
 
             
@@ -82,7 +84,7 @@ const AppLayOut = ({children}) =>{
             {userInfo &&  <li className="navli"><Link href={'/detailPage'} ><a>상세페이지</a></Link></li> }
             */}
             
-            {  <li className="navli"><Link href={{pathname:'/posts/mainPosts_1001',query:{nowPage:1}}} ><a>메인1001</a></Link></li> }
+            
             
             {userInfo &&   <li className="navli" onClick={logOut} >로그아웃</li>} 
             
@@ -96,6 +98,12 @@ const AppLayOut = ({children}) =>{
             {<li className="navli"><Link href={'/inputBoxParent'} ><a>inputBoxParent</a></Link></li>    }     
             */}
             
+        </ul>
+        <ul className="navulSub">
+        <li className="navli" onClick={catergoriList}><UnorderedListOutlined /></li>
+        <li className="navli"><Link href={{pathname:'/posts/mainPosts_1001',query:{nowPage:1}}} ><a>메인1001</a></Link></li>
+        <li className="navli"><Link href={''} ><a>게시판1</a></Link></li>
+        <li className="navli"><Link href={''} ><a>게시판2</a></Link></li>
         </ul>
         
     <div className="sidenav" style={{width : isClicked? "40%":"0"}}>

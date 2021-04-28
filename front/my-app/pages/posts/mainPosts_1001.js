@@ -34,7 +34,7 @@ const mainPosts_1001 = ({pages,group})=>{
 
   /*-------------------------------------------페이징 처리 로직 start-------------------------------------------------------*/
   const [nowPage,setNowPage] = useState(0);                       //현재 페이지
-  const [postsPerPage] = useState(5);                             //한 페이지당 list 수 
+  const [postsPerPage] = useState(100);                             //한 페이지당 list 수 
   const [groupPage , setGroupPage] = useState(5);                 //페이징 그룹 당 수  1~5 , 6~10 , 11~15 ... 5의 배수만 입력가능 
   const [nowGroupPageArray,setNowGroupPageArray] =useState([]);   //현재 페이징 그룹 배열
   
@@ -99,7 +99,7 @@ const mainPosts_1001 = ({pages,group})=>{
   //게시글 쓰기
   const gotoEdit = useCallback(()=>{
 
-    router.push('/CKEditor'); 
+    router.push('/posts/CKEditor'); 
   },[]); 
   
 
@@ -109,10 +109,34 @@ const mainPosts_1001 = ({pages,group})=>{
       <div className="divTable">
             {mainPosts_1001.map((v,i)=>(
                <div className='divTableRow' onClick={()=>gotoDetail(v.postId,v.userNickName,'1001',nowPage)}>
-                  <div className='divTableCell'><div className="divImageCell"><img src={v.content.indexOf(`<img src=`) !== -1 ? v.content.substr(v.content.indexOf(`<img src=`)+`<img src=`.length ,v.content.substring(v.content.indexOf(`<img src=`)+`<img src=`.length).indexOf('>')).split(`"`).join(''):`http://captainryan.gonetis.com:3095/noimages.gif`} /></div></div>
-                  <div className="divTableCell" ><Link href={{pathname:'/posts/detailPage' , query:{postId:v.postId,nickName:v.userNickName,postFlag:'1001'}}} ><a><font style={{fontSize:'2.5vh'}}>{isEmpty(v.title)} [{v.commentCount}]</font></a></Link><br/>
-                  <LikeTwoTone twoToneColor="#1ba640"/> : {v.good} <DislikeTwoTone twoToneColor="#1ba640"/> : {v.bad}  <EyeOutlined color="red"/> : {v.hit}<br/>
-                  <UserOutlined /> {isEmpty(v.userNickName)}   <FieldTimeOutlined /> {custumDateFormat(v.createdDate)}<br />
+               <div className='divTableImageCell'><div className="divImageCell"><img src={v.content.indexOf(`<img src=`) !== -1 ? v.content.substr(v.content.indexOf(`<img src=`)+`<img src=`.length ,v.content.substring(v.content.indexOf(`<img src=`)+`<img src=`.length).indexOf('>')).split(`"`).join(''):`http://captainryan.gonetis.com:3095/noimages.gif`} /></div></div>
+
+                {/* 
+                  <div className='divTableCell'>
+                    <div className="divImageCell">
+                      <img src={'https://upload.wikimedia.org/wikipedia/ko/6/60/%EA%B8%B0%EC%83%9D%EC%B6%A9_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg'} />
+                    </div>
+                  </div>
+                */}
+
+                  <div className="divTableCell" >    
+                    <Link href={{pathname:'/posts/detailPage' , query:{postId:v.postId,nickName:v.userNickName,postFlag:'1001'}}} ><a>
+                  
+                    <font size="2">
+
+                  <b>{isEmpty(v.title)}</b> 
+                    </font>
+               
+                    </a></Link><span className="countFontColor">[{v.commentCount}] </span>
+
+                    <br/>
+
+                    <div style={{marginTop:'3%'}}>
+                      <font size="1" style={{opacity:'0.7'}}>추천 {v.good}  </font>
+                    <br/>
+                      <font size="1" style={{opacity:'0.7'}}>{isEmpty(v.userNickName)}  {custumDateFormat(v.createdDate)}</font>
+                     
+                    </div>
                   </div>
               </div>
             ))}
