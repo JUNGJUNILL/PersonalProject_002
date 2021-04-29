@@ -56,49 +56,24 @@ const AppLayOut = ({children}) =>{
     return(
 
         <Row>
-
+    
 
         <Col xs={24}>
-        <ul className="navul">
-    
-            
-            <li className="navli"><HomeOutlined onClick={gotoHome} /></li>    
  
-            {/*
-            <li className="navli"><Link href={'/about'} ><a>About</a></Link></li>
-            <li className="navli"><Link href={'/count'} ><a>Count</a></Link></li>
-            */}
-            {/* 
-            <li className="navli"> <Link href={{pathname:'/posts/emp',query:{nowPage:1}}} ><a>emp</a></Link></li>  
-            <li className="navli"> <Link href={'/posts/dealerInfo'}><a>유통사정보</a></Link></li> 
-            <li className="navli"> <Link href={{pathname:'/posts/fileupload'}} ><a>파일업로드</a></Link></li>      
-            */}                
-            {!userInfo && <li className="navli"><Link href={'/auth/login'} ><a>로그인</a></Link></li>  }        
-            {!userInfo && <li className="navli"><Link href={'/auth/join'} ><a>회원가입</a></Link></li> }
+  
+        <header className="hd">
+        <h1 className="h1">
+        <img src="http://localhost:3095/koielogo.jpg" style={{width:"111",height:"28",justifyContent:"left"}}></img>
+	    </h1>
+        <div className="fr" style={{marginRight:"-5px"}}>
+         
+            <Link href={'/auth/login'} ><a className="mu">로그인</a></Link>
+            <Link href={'/auth/join'} ><a className="mu">회원가입</a></Link>
 
-            
+        </div>
+        </header>
+        
 
-            
-            {/*
-            {userInfo &&  <li className="navli"><Link href={'/userInfo'} ><a>회원정보</a></Link></li> }
-            {userInfo &&  <li className="navli"><Link href={'/detailPage'} ><a>상세페이지</a></Link></li> }
-            */}
-            
-            
-            
-            {userInfo &&   <li className="navli" onClick={logOut} >로그아웃</li>} 
-            
-            {/* 
-            리엑트 테스트용
-            {<li className="navli"><Link href={'/test'} ><a>test</a></Link></li>    } 
-            {<li className="navli"><Link href={'/test02'} ><a>memo</a></Link></li>    } 
-            {<li className="navli"><Link href={'/movie'} ><a>movie</a></Link></li>    } 
-            {<li className="navli"><Link href={'/useCallback'} ><a>useCallback</a></Link></li>    } 
-            {<li className="navli"><Link href={'/useEffect'} ><a>useEffect</a></Link></li>    }     
-            {<li className="navli"><Link href={'/inputBoxParent'} ><a>inputBoxParent</a></Link></li>    }     
-            */}
-            
-        </ul>
         <ul className="navulSub">
         <li className="navli" onClick={catergoriList}><UnorderedListOutlined /></li>
         <li className="navli"><Link href={{pathname:'/posts/mainPosts_1001',query:{nowPage:1}}} ><a>메인1001</a></Link></li>
