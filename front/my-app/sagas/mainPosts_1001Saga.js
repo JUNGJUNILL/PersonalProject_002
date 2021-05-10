@@ -38,6 +38,10 @@ import
         MAINPOSTS_1001_COMMENTBYCOMMENTLIKE_SUCCESS,
         MAINPOSTS_1001_COMMENTBYCOMMENTLIKE_FAILURE,
 
+        UPLOAD_IMAGES_REQUEST,
+        UPLOAD_IMAGES_SUCCESS,
+        UPLOAD_IMAGES_FAILURE,
+
     } 
 from '../reducers/mainPosts_1001'; 
 
@@ -400,6 +404,42 @@ function* watchMainPosts_1001CommentByCommentsLike(){
 //-----------------------------------------------------------------------------------
 
 
+//이미지 업로드
+//-----------------------------------------------------------------------------------
+function APImainPosts_1001UploadImage(data){
+    console.log('API==>',data); 
+    return axios.post(`/mainPosts_1001/images?postFlag=1001&user=${data.user}`,data.images,{withCredentials:true})
+}
+
+
+function* sagaMainPosts_1001UploadImage(action){
+
+    try{
+      console.log('UPLOAD_IMAGES_SUCCESS==>  ' , action.data.images);
+      const result = yield call(APImainPosts_1001UploadImage,action.data); 
+   
+      yield  put({
+            type:UPLOAD_IMAGES_SUCCESS, 
+            data:''
+        });
+
+    }catch(e){
+
+        console.error(e); 
+        alert('error', e); 
+        yield put({
+            type:UPLOAD_IMAGES_FAILURE, 
+            error: e, 
+        }); 
+    }
+}
+
+
+function* watchMainPosts_1001UploadImage(){
+    yield takeLatest(UPLOAD_IMAGES_REQUEST,sagaMainPosts_1001UploadImage); 
+}
+//-----------------------------------------------------------------------------------
+
 
 
 export default function* mainPosts_1001Saga(){
@@ -414,5 +454,6 @@ export default function* mainPosts_1001Saga(){
         fork(watchMainPosts_1001CommentByCommentInsert), 
         fork(watchMainPosts_1001CommentByCommentsLike), 
         fork(watchMainPosts_1001Like),
+        fork(watchMainPosts_1001UploadImage),
      ])
 }

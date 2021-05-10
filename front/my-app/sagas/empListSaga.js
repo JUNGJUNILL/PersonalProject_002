@@ -7,9 +7,9 @@ import
      EMP_INSERT_REQUEST,
      EMP_INSERT_SUCCESS,
      EMP_INSERT_FAILURE,
-     UPLOAD_IMAGES_REQUEST,
-     UPLOAD_IMAGES_SUCCESS,
-     UPLOAD_IMAGES_FAILURE,
+    //  UPLOAD_IMAGES_REQUEST,
+    //  UPLOAD_IMAGES_SUCCESS,
+    //  UPLOAD_IMAGES_FAILURE,
 
     TEST_REQUEST,
     TEST_SUCCESS,
@@ -177,7 +177,7 @@ export default function* empListSaga(){
     yield all([
         fork(watchempList), 
         fork(watchInsertEmp), 
-        fork(watchUploadImages), 
+        //fork(watchUploadImages), 
         fork(watchTest), 
      ])
 }

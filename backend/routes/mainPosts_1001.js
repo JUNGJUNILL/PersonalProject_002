@@ -5,7 +5,44 @@ const bcrypt = require('bcrypt');
 const pool = require('../DataBaseInfo');
 const jwt = require('jsonwebtoken'); 
 const router = express.Router();
+const multer =require('multer'); 
+const path   =require('path');
+const fs = require('fs'); 
 
+const upload = multer({
+    storage: multer.diskStorage({
+      destination(req, file, done) {
+          
+        const postFlag= req.query.postFlag;
+        const user= req.query.user;
+
+    fs.readdir(`images/${postFlag}/${user}`,(error,files)=>{
+        if(error){
+            fs.mkdirSync(`images/${postFlag}/${user}`); 
+        }
+    }); 
+
+       done(null, `images/${postFlag}/${user}`);
+       //done(null,'uploads'); 
+      },
+      filename(req, file, done) {
+        const ext = path.extname(file.originalname);
+        const basename = path.basename(file.originalname, ext); // 제로초.png, ext===.png, basename===제로초
+        done(null, basename + new Date().valueOf() + ext);
+      },
+    }),
+    limits: { fileSize: 20 * 1024 * 1024 }, //20MB
+  });
+
+
+
+  router.post('/images',upload.array('image'),(req,res)=>{
+      //const {images,postFlag,user} = req.body.data;
+
+    console.log('images==>' ,req.files); 
+    return //res.json(req.body.data.images.map(v=>v.filename)); 
+
+}); 
 
 
 

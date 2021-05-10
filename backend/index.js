@@ -49,7 +49,7 @@ app.use(cookieParser()); //req.cookies 사용가능,
 // app.use(passport.session()); 
 
 
-app.use('/api/emp',empAPIRouter); 
+//app.use('/api/emp',empAPIRouter); 
 app.use('/api/auth',authAPIRouter); 
 app.use('/api/mainPosts_1001',mainPosts_1001APIRouter); 
 

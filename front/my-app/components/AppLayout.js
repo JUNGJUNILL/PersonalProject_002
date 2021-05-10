@@ -79,12 +79,14 @@ const AppLayOut = ({children}) =>{
         <h1 className="h1">
         <img src="http://localhost:3095/koielogo.jpg" style={{width:"111",height:"28",justifyContent:"left"}}></img>
 	    </h1>
+
         <div className="fr" style={{marginRight:"-5px"}}>
-         
+        
             <Link href={'/auth/login'} ><a className="mu">로그인</a></Link>
             <Link href={'/auth/join'} ><a className="mu">회원가입</a></Link>
 
         </div>
+  
         </header>
         
 
@@ -93,6 +95,7 @@ const AppLayOut = ({children}) =>{
         <li className="navli"><Link href={{pathname:'/posts/mainPosts_1001',query:{nowPage:1}}} ><a>메인1001</a></Link></li>
         <li className="navli"><Link href={''} ><a>게시판1</a></Link></li>
         <li className="navli"><Link href={''} ><a>게시판2</a></Link></li>
+        <li className="navli"><Link href={{pathname:'/posts/postEdit'}} ><a>글쓰기</a></Link></li>
         </ul>
     {/* 
     <div className="sidenav" style={{width : isClicked? "40%":"0"}}>
@@ -120,6 +123,7 @@ const AppLayOut = ({children}) =>{
     >
 
         <Menu
+
         style={{width:400,marginLeft:-30}}
         defaultOpenKeys={['sub1']}
         mode="inline"
@@ -144,17 +148,6 @@ const AppLayOut = ({children}) =>{
         </Menu>
 
     </Drawer>
-
-    <Menu
-      
-    defaultOpenKeys={['sub1']}
-    mode="inline"
-    >
-    <SubMenu key="sub2" title="Navigation Two">
-    <Menu.Item key="5">Option 5</Menu.Item>
-    <Menu.Item key="6">Option 6</Menu.Item>
-    </SubMenu>
-    </Menu>
 
 
     {children}

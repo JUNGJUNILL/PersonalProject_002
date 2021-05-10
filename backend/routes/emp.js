@@ -91,7 +91,7 @@ router.post('/ckeditor',upload.single('upload'),(req,res,next)=>{
 
         res.status(200).json({
           uploaded:true,
-          url:`http://captainryan.gonetis.com:3095/${postIdFolder}/${userNickNameFolder}/${TempFile.filename}`
+          url:`http://localhost:3095/${postIdFolder}/${userNickNameFolder}/${TempFile.filename}`
         })
 
         if(err){

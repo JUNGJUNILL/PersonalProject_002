@@ -17,9 +17,9 @@ export const EMP_INSERT_REQUEST = 'EMP_INSERT_REQUEST';
 export const EMP_INSERT_SUCCESS = 'EMP_INSERT_SUCCESS'; 
 export const EMP_INSERT_FAILURE = 'EMP_INSERT_FAILURE'; 
 
-export const UPLOAD_IMAGES_REQUEST="UPLOAD_IMAGES_REQUEST";
-export const UPLOAD_IMAGES_SUCCESS="UPLOAD_IMAGES_SUCCESS";
-export const UPLOAD_IMAGES_FAILURE="UPLOAD_IMAGES_FAILURE";
+// export const UPLOAD_IMAGES_REQUEST="UPLOAD_IMAGES_REQUEST";
+// export const UPLOAD_IMAGES_SUCCESS="UPLOAD_IMAGES_SUCCESS";
+// export const UPLOAD_IMAGES_FAILURE="UPLOAD_IMAGES_FAILURE";
 
 export const DETAIL_INFO_REQUEST ='DETAIL_INFO_REQUEST'; 
 export const DETAIL_INFO_SUCCESS ='DETAIL_INFO_SUCCESS'; 
@@ -60,24 +60,24 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
 
 
 //----------------------------------------
-            case UPLOAD_IMAGES_REQUEST: {
-                break; 
-            }
+            // case UPLOAD_IMAGES_REQUEST: {
+            //     break; 
+            // }
 
 
-            case UPLOAD_IMAGES_SUCCESS: {
+            // case UPLOAD_IMAGES_SUCCESS: {
                 
-                draft.imagePaths.length=0; 
-                action.data.forEach((v)=>{
-                    draft.imagePaths.push(v); 
-                }); 
+            //     draft.imagePaths.length=0; 
+            //     action.data.forEach((v)=>{
+            //         draft.imagePaths.push(v); 
+            //     }); 
 
-                break; 
-            }
+            //     break; 
+            // }
 
-            case UPLOAD_IMAGES_FAILURE: {
-                break; 
-            }
+            // case UPLOAD_IMAGES_FAILURE: {
+            //     break; 
+            // }
 //----------------------------------------
 
 

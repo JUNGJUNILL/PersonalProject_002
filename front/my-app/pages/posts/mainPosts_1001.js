@@ -109,8 +109,8 @@ const mainPosts_1001 = ({pages,group})=>{
       <div className="divTable">
             {mainPosts_1001.map((v,i)=>(
                <div className='divTableRow' onClick={()=>gotoDetail(v.postId,v.userNickName,'1001',nowPage)}>
-               {/*{v.content.indexOf(`<img src=`) !== -1 ? v.content.substr(v.content.indexOf(`<img src=`)+`<img src=`.length ,v.content.substring(v.content.indexOf(`<img src=`)+`<img src=`.length).indexOf('>')).split(`"`).join(''):`http://captainryan.gonetis.com:3095/noimages.gif`} */}
-               <div className='divTableImageCell'><div className="divImageCell"><img src="https://1.bp.blogspot.com/-OwYG3N3yu6g/YIUhht23UzI/AAAAAAACMGM/vRiUrxC4YygmUSIciBwCp2UW2UDEmGfiACLcBGAsYHQ/s0/%2527%25EC%2586%25A1%25EC%25A3%25BC%25EC%2595%2584%2B%25EB%258F%258C%25ED%2595%2580%2B%25ED%258C%25AC%25EC%25B8%25A0%2B%25EC%2595%2588%2B%25EB%25B3%25BC%2B%25EC%259E%2590%25EC%258B%25A0%2B%25EC%259E%2588%25EC%258A%25B5%25EB%258B%2588%25EA%25B9%258C%2527%2B%25232021%25EB%25B6%2580%25EC%2582%25B0%25EA%25B5%25AD%25EC%25A0%259C%25EB%25B3%25B4%25ED%258A%25B8%25EC%2587%25BC%2B4K%2B%25EC%25A7%2581%25EC%25BA%25A0%2Bby%2BDDUKKEONG.mkv_20210425_165304.570.jpg" /></div></div>
+               
+               <div className='divTableImageCell'><div className="divImageCell"><img src={v.content.indexOf(`<img src=`) !== -1 ? v.content.substr(v.content.indexOf(`<img src=`)+`<img src=`.length ,v.content.substring(v.content.indexOf(`<img src=`)+`<img src=`.length).indexOf('>')).split(`"`).join(''):`http://captainryan.iptime.org:3095/noimages.gif`}  /></div></div>
 
                 {/* 
                   <div className='divTableCell'>
