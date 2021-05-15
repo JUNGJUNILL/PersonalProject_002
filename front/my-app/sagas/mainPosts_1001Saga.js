@@ -407,7 +407,6 @@ function* watchMainPosts_1001CommentByCommentsLike(){
 //이미지 업로드
 //-----------------------------------------------------------------------------------
 function APImainPosts_1001UploadImage(data){
-    console.log('API==>',data); 
     return axios.post(`/mainPosts_1001/images?postFlag=1001&user=${data.user}`,data.images,{withCredentials:true})
 }
 
@@ -415,12 +414,11 @@ function APImainPosts_1001UploadImage(data){
 function* sagaMainPosts_1001UploadImage(action){
 
     try{
-      console.log('UPLOAD_IMAGES_SUCCESS==>  ' , action.data.images);
       const result = yield call(APImainPosts_1001UploadImage,action.data); 
-   
+      
       yield  put({
             type:UPLOAD_IMAGES_SUCCESS, 
-            data:''
+            data:result.data,
         });
 
     }catch(e){

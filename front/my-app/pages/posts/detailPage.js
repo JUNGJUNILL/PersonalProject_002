@@ -19,7 +19,7 @@ import custumDateFormat from  '../../util/custumDateFormat';
 
 
 
-const detailPage  = ({nickName,postFlag,postId}) =>{
+const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
 
   const dispatch = useDispatch(); 
   const {mainPosts_1001Info , 
@@ -27,7 +27,7 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
          mainPosts_1001CommentByComments
         } = useSelector((state)=>state.mainPosts_1001); 
 
-  const {userInfo}      = '1111'; //useSelector((state)=>state.auth);
+  const userInfo      = '1111'; //useSelector((state)=>state.auth);
   const ref = createRef(); 
   const blank_pattern = /^\s+|\s+&/g;  
   const [unfoldList,setUnfoldList] = useState('fold'); 
@@ -42,6 +42,7 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
         nickName,
         postFlag,
         who:userInfo, 
+        submitDay,
       }
     }); 
 
@@ -53,10 +54,11 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
             nickName,
             postFlag,
             who:userInfo,
+            submitDay
           }
     });
 
-  },[nickName,postFlag,postId]);
+  },[nickName,postFlag,postId,submitDay]);
 
   //게시글 좋아요, 실어요 버튼
   const postLikeBtn = useCallback((likeFlag)=>{
@@ -91,7 +93,7 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
 
 
   //댓글 좋아요, 싫어요 버튼 
-  const likeBtn =useCallback((commentid,flag,likeDislike)=>{
+  const likeBtn =useCallback((commentid,flag,likeDislike,submitDay)=>{
       if(!userInfo){
         alert('로그인이 필요한 서비스 입니다.'); 
         return;
@@ -114,6 +116,7 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
             flag: likeDislike ,
             who: userInfo,
             nickName,
+            submitDay,
             mainPosts_1001Comments:[...mainPosts_1001Comments],
           }
       }); 
@@ -171,7 +174,7 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
 
 
       //대댓글 리스트 
-      const commentByCommentList =useCallback((postFlag,nickName,postId,commentId,clickCommentId,unfoldList)=>{
+      const commentByCommentList =useCallback((postFlag,nickName,postId,commentId,clickCommentId,unfoldList,submitDay)=>{
                
                 if(unfoldList==='unfold' && commentId === clickCommentId){
                   setUnfoldList('fold'); 
@@ -187,6 +190,7 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
                         postId,
                         commentId,
                         who:userInfo,
+                        submitDay
                     }
                 });      
 
@@ -278,6 +282,7 @@ const detailPage  = ({nickName,postFlag,postId}) =>{
               nickName={nickName} 
               postId={postId} 
               userInfo={userInfo}
+              submitDay={submitDay}
     
               commentId={v.commentId} 
               comment={v.comment} 
@@ -314,8 +319,10 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
   const postId   = context.query.postId; 
   const nickName = context.query.nickName; 
   const postFlag = context.query.postFlag; 
+  const submitDay = context.query.submitDay; 
+  
   return {
-      props: {nickName,postFlag,postId}, // will be passed to the page component as props
+      props: {nickName,postFlag,postId,submitDay}, // will be passed to the page component as props
     } 
 
 });

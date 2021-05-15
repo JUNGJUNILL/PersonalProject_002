@@ -9,6 +9,9 @@ export const  initialState = {
                         //하 이것때매 몇시간을 날려 먹었는지.. 아크릴 새우님이 해결법을 알려주심
     mainPosts_1001Comments : [],
     mainPosts_1001CommentByComments:[{}],  
+
+    imageFileName : [], 
+    imageUploading: false, 
     imagePaths         : [],
     likeIsClicked :null, 
     clickCommentId:null, 
@@ -266,6 +269,26 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             }
 
             case MAINPOSTS_1001_COMMENTBYCOMMENTLIKE_FAILURE: {
+                break; 
+            }
+//----------------------------------------
+
+
+//이미지 업로드       
+//----------------------------------------
+            case UPLOAD_IMAGES_REQUEST: {
+                draft.imageUploading=true;
+                break; 
+            }
+
+            case UPLOAD_IMAGES_SUCCESS: {
+                draft.imageUploading=false;
+                console.log('reducer=>', action.data); 
+                draft.imageFileName=draft.imageFileName.concat(action.data); 
+                break; 
+            }
+
+            case UPLOAD_IMAGES_FAILURE: {
                 break; 
             }
 //----------------------------------------

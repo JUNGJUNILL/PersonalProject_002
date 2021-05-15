@@ -88,10 +88,10 @@ const mainPosts_1001 = ({pages,group})=>{
 
 
   //게시글 상세 페이지 
-  const gotoDetail = useCallback((postId,userNickName,postFlag)=>{
+  const gotoDetail = useCallback((postId,userNickName,postFlag,submitDay)=>{
 
     router.push({pathname:'/posts/detailPage',
-                 query:{postId,nickName:userNickName,postFlag},
+                 query:{postId,nickName:userNickName,postFlag,submitDay},
               }); 
   },[]); 
 
@@ -108,7 +108,7 @@ const mainPosts_1001 = ({pages,group})=>{
 
       <div className="divTable">
             {mainPosts_1001.map((v,i)=>(
-               <div className='divTableRow' onClick={()=>gotoDetail(v.postId,v.userNickName,'1001',nowPage)}>
+               <div className='divTableRow' onClick={()=>gotoDetail(v.postId,v.userNickName,'1001',v.submitDay)}>
                
                <div className='divTableImageCell'><div className="divImageCell"><img src={v.content.indexOf(`<img src=`) !== -1 ? v.content.substr(v.content.indexOf(`<img src=`)+`<img src=`.length ,v.content.substring(v.content.indexOf(`<img src=`)+`<img src=`.length).indexOf('>')).split(`"`).join(''):`http://captainryan.iptime.org:3095/noimages.gif`}  /></div></div>
 
@@ -121,7 +121,7 @@ const mainPosts_1001 = ({pages,group})=>{
                 */}
 
                   <div className="divTableCell" >    
-                    <Link href={{pathname:'/posts/detailPage' , query:{postId:v.postId,nickName:v.userNickName,postFlag:'1001'}}} ><a>
+                    <Link href={{pathname:'/posts/detailPage' , query:{postId:v.postId,nickName:v.userNickName,postFlag:'1001',submitDay:v.submitDay}}} ><a>
                   
                     <font size="2">
 

@@ -18,6 +18,7 @@ const Comments1001 = ({
                       nickName,
                       postId,
                       userInfo,
+                      submitDay,
 
                       commentId,
                       comment,
@@ -122,11 +123,11 @@ const Comments1001 = ({
                     <div  className="divTableCell">        
                     <b>{who}</b> &nbsp; <small>{custumDateFormat(createdDate)}</small><br/>
                     {comment}<br />
-                    <a onClick={()=>commentByCommentList(postFlag,nickName,postId,commentId,clickCommentId,unfoldList)}>{`댓글[${commentByCommentInsertCommentId===commentId ? commentByCommentCount : byCommentCount}]`   }</a> {commentId}          
+                    <a onClick={()=>commentByCommentList(postFlag,nickName,postId,commentId,clickCommentId,unfoldList,submitDay)}>{`댓글[${commentByCommentInsertCommentId===commentId ? commentByCommentCount : byCommentCount}]`   }</a> {commentId}          
                         <div  style={{marginTop:"1%",display:"block",float:"right"}}>
-                            <LikeTwoTone onClick={()=>likeBtn(commentId,flag,'good')} twoToneColor={clickedComponent && likeDislikeflag==='good' ? "#ff0000" : "#1ba640"}/>{clickedComponent && likeDislikeflag==='good' ? parseInt(good)+1:good}
+                            <LikeTwoTone onClick={()=>likeBtn(commentId,flag,'good',submitDay)} twoToneColor={clickedComponent && likeDislikeflag==='good' ? "#ff0000" : "#1ba640"}/>{clickedComponent && likeDislikeflag==='good' ? parseInt(good)+1:good}
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <DislikeTwoTone onClick={()=>likeBtn(commentId,flag,'bad')} twoToneColor={clickedComponent && likeDislikeflag==='bad' ? "#ff0000" : "#1ba640"} />{clickedComponent && likeDislikeflag==='bad' ? parseInt(bad)+1:bad}
+                            <DislikeTwoTone onClick={()=>likeBtn(commentId,flag,'bad',submitDay)} twoToneColor={clickedComponent && likeDislikeflag==='bad' ? "#ff0000" : "#1ba640"} />{clickedComponent && likeDislikeflag==='bad' ? parseInt(bad)+1:bad}
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <br />
                         </div> 

@@ -378,3 +378,22 @@ img {
    text-decoration:none
   }
   /*header 부분*/
+
+
+  /*이미지 */
+  .dot {
+    width:60px;
+    height:60px;
+    background-color:orangered;
+    color:white;
+    font-size:3rem;
+    line-height:60px;
+    display: inline-block;
+  }
+  
+  .dot-wrapper {
+     text-align:center;
+ 
+ 
+  
+  }

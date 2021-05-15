@@ -37,12 +37,8 @@ const upload = multer({
 
 
   router.post('/images',upload.array('image'),(req,res)=>{
-      //const {images,postFlag,user} = req.body.data;
-
-    console.log('images==>' ,req.files); 
-    return //res.json(req.body.data.images.map(v=>v.filename)); 
-
-}); 
+     return res.json(req.files.map(v=>v.filename)); 
+  }); 
 
 
 
@@ -75,7 +71,7 @@ router.post('/', async (req,res,next)=>{
 router.post('/mainPosts_1001Detail', async (req,res,next)=>{
 
     try{    
-        const {postId, nickName, postFlag, who}= req.body.data; 
+        const {postId, nickName, postFlag, who, submitDay}= req.body.data; 
 
 
         //(쿠키가 없는 경우 게시글 정보로 쿠키생성)
@@ -83,8 +79,9 @@ router.post('/mainPosts_1001Detail', async (req,res,next)=>{
 
             let rowQuery ='CALL US_UPDATE_mainPostsHit'; 
             rowQuery =rowQuery.concat(`('${postId}',`);
-            rowQuery =rowQuery.concat(`'${nickName}',`); 
-            rowQuery =rowQuery.concat(`'${postFlag}')`);
+            rowQuery =rowQuery.concat(`'${nickName}',`);
+            rowQuery =rowQuery.concat(`'${postFlag}',`); 
+            rowQuery =rowQuery.concat(`'${submitDay}')`);
             console.log(rowQuery); 
             await pool.query(rowQuery); 
          
@@ -99,8 +96,9 @@ router.post('/mainPosts_1001Detail', async (req,res,next)=>{
         let stringQuery = 'CALL US_SELECT_mainPostsDetail'; 
             stringQuery =stringQuery.concat(`('${postId}',`);
             stringQuery =stringQuery.concat(`'${nickName}',`); 
-            stringQuery =stringQuery.concat(`'${postFlag}',`); 
-            stringQuery =stringQuery.concat(`'${who}')`);
+            stringQuery =stringQuery.concat(`'${postFlag}',`);
+            stringQuery =stringQuery.concat(`'${who}',`); 
+            stringQuery =stringQuery.concat(`'${submitDay}')`);
 
         const mainPosts_1001Detail = await pool.query(stringQuery); 
         console.log(stringQuery); 
@@ -121,14 +119,15 @@ router.post('/mainPosts_1001Comments', async (req,res,next)=>{
 
     try{
 
-        const {postId, nickName, postFlag, who}= req.body.data; 
+        const {postId, nickName, postFlag, who, submitDay}= req.body.data; 
         
 
         let stringQuery = 'CALL US_SELECT_mainPostComments'; 
         stringQuery =stringQuery.concat(`('${postFlag}',`);
         stringQuery =stringQuery.concat(`'${postId}',`); 
-        stringQuery =stringQuery.concat(`'${nickName}',`); 
-        stringQuery =stringQuery.concat(`'${who}')`);
+        stringQuery =stringQuery.concat(`'${nickName}',`);
+        stringQuery =stringQuery.concat(`'${who}',`); 
+        stringQuery =stringQuery.concat(`'${submitDay}')`);
 
         const mainPosts_1001Comments = await pool.query(stringQuery); 
         console.log(stringQuery); 
@@ -288,6 +287,7 @@ router.post('/mainPosts_1001CommentLike', async (req,res,next)=>{
                 flag,
                 who,
                 nickName,
+                submitDay,
                 }= req.body.data; 
         
 
@@ -296,7 +296,8 @@ router.post('/mainPosts_1001CommentLike', async (req,res,next)=>{
         stringQuery =stringQuery.concat(`'${postFlag}',`); 
         stringQuery =stringQuery.concat(`'${postId}',`); 
         stringQuery =stringQuery.concat(`'${nickName}',`); 
-        stringQuery =stringQuery.concat(`'${who}')`);
+        stringQuery =stringQuery.concat(`'${who}',`); 
+        stringQuery =stringQuery.concat(`'${submitDay}')`);
         console.log('stringQuery==>' , stringQuery); 
         const mainPosts_1001CommentLike = await pool.query(stringQuery); 
 
@@ -308,7 +309,8 @@ router.post('/mainPosts_1001CommentLike', async (req,res,next)=>{
             stringQuery =stringQuery.concat(`'${postId}',`); 
             stringQuery =stringQuery.concat(`'${nickName}',`); 
             stringQuery =stringQuery.concat(`'${flag}',`); 
-            stringQuery =stringQuery.concat(`'${who}')`)
+            stringQuery =stringQuery.concat(`'${who}',`); 
+            stringQuery =stringQuery.concat(`'${submitDay}')`)
             await pool.query(stringQuery); 
         }
 
@@ -339,6 +341,7 @@ router.post('/mainPosts_1001CommentByComments', async (req,res,next)=>{
                 postId,
                 commentId,
                 who,
+                submitDay,
             } = req.body.data; 
 
             let stringQuery = 'CALL US_SELECT_mainPostCommentByComments '; 
@@ -346,7 +349,8 @@ router.post('/mainPosts_1001CommentByComments', async (req,res,next)=>{
             stringQuery =stringQuery.concat(`'${nickName}',`); 
             stringQuery =stringQuery.concat(`'${postId}',`); 
             stringQuery =stringQuery.concat(`'${commentId}',`); 
-            stringQuery =stringQuery.concat(`'${who}')`);
+            stringQuery =stringQuery.concat(`'${who}',`); 
+            stringQuery =stringQuery.concat(`'${submitDay}')`);
 
 
             const mainPosts_1001CommentByComment = await pool.query(stringQuery); 

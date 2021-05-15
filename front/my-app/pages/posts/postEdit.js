@@ -1,5 +1,5 @@
-import { useState, useCallback, createRef } from 'react';
-import {PictureOutlined,PlaySquareOutlined} from '@ant-design/icons'
+import { useState, useCallback, useRef } from 'react';
+import {PictureOutlined,PlaySquareOutlined,CloseOutlined} from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux';
 import {Button, Input,} from 'antd'
 import 
@@ -15,11 +15,12 @@ const postEdit = () =>{
 
 
     const dispatch = useDispatch(); 
+    const {imageUploading,imageFileName} = useSelector((state)=>state.mainPosts_1001); 
 
-    const refTitle = createRef(); 
-    const refContent = createRef(); 
-    const imageInput = createRef();
-    const videoInput = createRef(); 
+    const refTitle = useRef(); 
+    const refContent = useRef(); 
+    const imageInput = useRef();
+    const videoInput = useRef(); 
 
     const blank_pattern = /^\s+|\s+&/g; 
     const [title,setTtile] = useState(''); 
@@ -69,8 +70,7 @@ const postEdit = () =>{
     },[videoInput.current]); 
 
     //이미지 업로드 
-    const onChangeImages = (e)=>{
-
+    const onChangeImages = useCallback((e)=>{
     
         //파일을 2개 올렸을 시 e.target.files의 생김새
         //{0:File, 1:File, length:2} 유사 배열 형태
@@ -84,30 +84,34 @@ const postEdit = () =>{
         const imageFormData = new FormData(); 
         Array.prototype.forEach.call(e.target.files,(f,i)=>{
 
-            console.log('e.target.files==>',e.target.files); 
+            //10485760 BYTE == 10MB
             if(Object.values(e.target.files)[i].size > 10485760){
                 alert('10MB 이상 올릴 수 없습니다.');
                 return; 
             }else{
                 imageFormData.append('image',f); 
-                dispatch({type:UPLOAD_IMAGES_REQUEST,
-                    data:{images:imageFormData,
-                         postFlag:'1001',
-                         user:'null',
-
-                    },
-                        
-                   
-                    }); 
             }
-         
-        
-            
+
         }); 
+        const imageArray = imageFormData.getAll('image');
+        
+        if(imageArray.length > 5){
+            alert('게시물당 이미지는 5장 올릴 수 있습니다.'); 
+            imageFormData.delete('image'); 
+            return; 
+        }else{
+
+            dispatch({type:UPLOAD_IMAGES_REQUEST,
+                data:{images:imageFormData,
+                     postFlag:'1001',
+                     user:'null',
+                    },
+                }); 
     
+        }
 
 
-    }; 
+    },[]); 
 
     return (
         <div style={{marginTop:'3%'}}>
@@ -116,16 +120,26 @@ const postEdit = () =>{
             {/*비디오 업로드 */}
             <input type="file" name="video" multiple hidden ref={videoInput} accept={'.mp4'} onChange={onClickVideoUpload}/>
             
-
         <Input placeholder='제목을 입력하세요' ref={refTitle} onChange={onChangeTtitle} style={{marginBottom:'2%'}}/>
         <TextArea placeholder='하고 싶은 이야기' ref={refContent} onChange={onChangeContent} rows={4} />
         <div style={{marginTop:'2%',textAlign:'center'}}>
             <Button onClick={onClickImageUpload} >    <PictureOutlined />    </Button>&nbsp;
             <Button onClick={onClickVideoUpload} >    <PlaySquareOutlined />    </Button>&nbsp;
-            <Button type="primary" onClick={contentSummit}>  submit  </Button>
+            <Button type="primary" onClick={contentSummit} loading={imageUploading}>  submit  </Button>
        </div> 
        <br/>
-        
+
+       <div style={{textAlign:'center'}}>
+            {imageFileName && imageFileName.map((v,i)=>(
+                <div style={{display:'inline-block'}} key={i} >
+                    <img style={{width:'60px',height:'60px'}} src={`http://localhost:3095/1001/null/${v}`} />    
+                    <br/>
+                    <Button style={{width:'60px'}}><CloseOutlined /></Button>
+                </div>
+            ))}
+        </div>
+  
+      
 
         </div>
     )
