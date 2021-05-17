@@ -155,7 +155,8 @@ router.post('/mainPosts_1001CommentInsert', async (req,res,next)=>{
                 postFlag,
                 nickName,
                 who,
-                comment,}= req.body.data; 
+                comment,
+                submitDay,}= req.body.data; 
         
 
         let stringQuery = 'CALL US_INSERT_mainPostsComments'; 
@@ -163,7 +164,8 @@ router.post('/mainPosts_1001CommentInsert', async (req,res,next)=>{
         stringQuery =stringQuery.concat(`'${postFlag}',`); 
         stringQuery =stringQuery.concat(`'${nickName}',`); 
         stringQuery =stringQuery.concat(`'${who}',`); 
-        stringQuery =stringQuery.concat(`'${comment}')`);
+        stringQuery =stringQuery.concat(`'${comment}',`); 
+        stringQuery =stringQuery.concat(`'${submitDay}')`);
         await pool.query(stringQuery); 
     
         stringQuery=''; 
@@ -171,7 +173,8 @@ router.post('/mainPosts_1001CommentInsert', async (req,res,next)=>{
         stringQuery =stringQuery.concat(`('${postFlag}',`);
         stringQuery =stringQuery.concat(`'${postId}',`); 
         stringQuery =stringQuery.concat(`'${nickName}',`); 
-        stringQuery =stringQuery.concat(`'${who}')`);
+        stringQuery =stringQuery.concat(`'${who}',`); 
+        stringQuery =stringQuery.concat(`'${submitDay}')`);
 
 
         const mainPosts_1001CommentInsert = await pool.query(stringQuery); 
@@ -380,7 +383,8 @@ router.post('/mainPosts_1001CommentByCommentsLike', async (req,res,next)=>{
                 postFlag,
                 nickName,
                 who,
-                flag,     
+                flag,   
+                submitDay  
                         }= req.body.data; 
 
         let stringQuery = 'CALL US_SELECT_mainPostCommentByCommentsLikeDislike '; 
@@ -389,8 +393,9 @@ router.post('/mainPosts_1001CommentByCommentsLike', async (req,res,next)=>{
         stringQuery =stringQuery.concat(`'${postFlag}',`); 
         stringQuery =stringQuery.concat(`'${postId}',`); 
         stringQuery =stringQuery.concat(`'${nickName}',`); 
-        stringQuery =stringQuery.concat(`'${who}')`);
-        console.log('stringQuery==>' , stringQuery); 
+        stringQuery =stringQuery.concat(`'${who}',`); 
+        stringQuery =stringQuery.concat(`'${submitDay}')`);
+        console.log(stringQuery); 
         const mainPosts_1001CommentByCommentsLike = await pool.query(stringQuery); 
         if(mainPosts_1001CommentByCommentsLike[0][0].flag=== "N"){
             stringQuery=''; 
@@ -400,8 +405,10 @@ router.post('/mainPosts_1001CommentByCommentsLike', async (req,res,next)=>{
             stringQuery =stringQuery.concat(`'${postId}',`); 
             stringQuery =stringQuery.concat(`'${postFlag}',`); 
             stringQuery =stringQuery.concat(`'${nickName}',`); 
-            stringQuery =stringQuery.concat(`'${who}',`); 
-            stringQuery =stringQuery.concat(`'${flag}')`)
+            stringQuery =stringQuery.concat(`'${who}',`);
+            stringQuery =stringQuery.concat(`'${flag}',`);
+            stringQuery =stringQuery.concat(`'${submitDay}')`);
+            console.log(stringQuery);
             await pool.query(stringQuery); 
         }
 

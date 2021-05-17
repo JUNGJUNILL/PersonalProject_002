@@ -368,7 +368,6 @@ function* sagaMainPosts_1001CommentByCommentsLike(action){
 
     try{
       const result = yield call(APImainPosts_1001CommentByCommentsLike,action.data); 
-     console.log('mainPosts_1001CommentByComments=>',action.data.mainPosts_1001CommentByComments); 
         
      action.data.mainPosts_1001CommentByComments.map((v,i)=>{
         if(v.byCommentId === action.data.byCommentId){

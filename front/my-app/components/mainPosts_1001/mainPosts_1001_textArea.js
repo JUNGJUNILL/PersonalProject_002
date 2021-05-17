@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 //forwardRef
 //https://ko.reactjs.org/docs/react-api.html#reactforwardref
 
-const  CommentTextArea= forwardRef(({postFlag,nickName,postId,userInfo,insertComment,unfoldList} ,ref) =>{
+const  CommentTextArea= forwardRef(({postFlag,nickName,postId,userInfo,insertComment,submitDay} ,ref) =>{
 
     const focusRef = createRef(); 
     const [comment, setComment] = useState(''); 
@@ -48,7 +48,7 @@ return (
 
     {userInfo && 
         <div style={{margin:"1%",display:"block",float:"right"}}>
-            <Button type="primary" loading={isWriting} onClick={()=>insertComment(postFlag,postId,nickName,comment)}>댓글달기</Button>
+            <Button type="primary" loading={isWriting} onClick={()=>insertComment(postFlag,postId,nickName,comment,submitDay)}>댓글달기</Button>
         </div>
     }
 

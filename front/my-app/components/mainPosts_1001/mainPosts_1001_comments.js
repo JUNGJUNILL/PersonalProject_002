@@ -90,7 +90,7 @@ const Comments1001 = ({
 
 
       //대댓글 좋아요, 싫어요 버든 
-      const commentByCommentLikeBtn =useCallback((byCommentId,flag,likeDislike)=>{
+      const commentByCommentLikeBtn =useCallback((byCommentId,flag,likeDislike,submitDay)=>{
             
             if(flag==="Y"){
                 
@@ -108,6 +108,7 @@ const Comments1001 = ({
                         nickName,
                         who:userInfo,
                         flag : likeDislike,
+                        submitDay,
                         mainPosts_1001CommentByComments:[...mainPosts_1001CommentByComments], 
                     }
                 })
@@ -143,6 +144,7 @@ const Comments1001 = ({
                             postId={postId}
                             userInfo={userInfo}
                             commentId={commentId}
+                            submitDay={submitDay}
 
                             byCommentId={v.byCommentId}
                             comment={v.comment}

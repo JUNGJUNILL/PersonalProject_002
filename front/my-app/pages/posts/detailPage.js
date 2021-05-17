@@ -129,7 +129,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
 
 
   //댓글 입력 
-  const insertComment = useCallback((postFlag,postId,nickName ,comment)=>{
+  const insertComment = useCallback((postFlag,postId,nickName,comment,submitDay)=>{
     if(comment.length === 0 || comment.replace(blank_pattern,'')===""){
       
          
@@ -156,6 +156,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
               nickName ,
               who:userInfo, 
               comment,
+              submitDay,
             }
         });
 
@@ -206,7 +207,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
     {/*상세 페이지 타이틀--------------------------------------------------------------------------------*/}
       <div className='divTable' style={{marginTop:'3%'}}>
             <div className='divTableRowTh'>
-                <div className='divTableCellTh'>{mainPosts_1001Info[0].title} [{mainPosts_1001Comments.length}]</div>
+                <div className='divTableCellTh'>{mainPosts_1001Info[0].title},{mainPosts_1001Info[0].postId} [{mainPosts_1001Comments.length}]</div>
            </div>
            <div className='divTableRow'>
                 <div className='divTableCell'>
@@ -264,6 +265,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
             postId={postId} 
             userInfo={userInfo}
             insertComment={insertComment}
+            submitDay={submitDay}
             ref={ref}
    />
     {/*댓글 입력--------------------------------------------------------------------------------*/}
