@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 //forwardRef
 //https://ko.reactjs.org/docs/react-api.html#reactforwardref
 
-const  CommentTextArea= forwardRef(({postFlag,nickName,postId,userInfo,insertComment,submitDay} ,ref) =>{
+const  CommentTextArea= forwardRef(({postFlag,nickName,postId,userInfo,submitDay,insertComment} ,ref) =>{
 
     const focusRef = createRef(); 
     const [comment, setComment] = useState(''); 

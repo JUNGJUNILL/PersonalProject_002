@@ -202,7 +202,8 @@ router.post('/mainPosts_1001CommentByCommentInsert', async (req,res,next)=>{
                 postId,
                 commentId,
                 who,
-                comment,}= req.body.data; 
+                comment,
+                submitDay,}= req.body.data; 
         
 
         let stringQuery = 'CALL US_INSERT_mainPostsCommentByComments'; 
@@ -211,7 +212,8 @@ router.post('/mainPosts_1001CommentByCommentInsert', async (req,res,next)=>{
         stringQuery =stringQuery.concat(`'${postId}',`); 
         stringQuery =stringQuery.concat(`'${commentId}',`); 
         stringQuery =stringQuery.concat(`'${who}',`); 
-        stringQuery =stringQuery.concat(`'${comment}')`);
+        stringQuery =stringQuery.concat(`'${comment}',`); 
+        stringQuery =stringQuery.concat(`'${submitDay}')`);
         await pool.query(stringQuery); 
     
         stringQuery=''; 
@@ -220,7 +222,8 @@ router.post('/mainPosts_1001CommentByCommentInsert', async (req,res,next)=>{
         stringQuery =stringQuery.concat(`'${nickName}',`); 
         stringQuery =stringQuery.concat(`'${postId}',`); 
         stringQuery =stringQuery.concat(`'${commentId}',`); 
-        stringQuery =stringQuery.concat(`'${who}')`);
+        stringQuery =stringQuery.concat(`'${who}',`); 
+        stringQuery =stringQuery.concat(`'${submitDay}')`);
 
 
         const mainPosts_1001CommentByCommentInsert = await pool.query(stringQuery); 

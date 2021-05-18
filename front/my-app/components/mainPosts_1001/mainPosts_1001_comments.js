@@ -49,7 +49,7 @@ const Comments1001 = ({
   const blank_pattern = /^\s+|\s+&/g;  
         
   //대댓글 입력 
-  const insertComment = useCallback((postFlag,postId,nickName ,comment)=>{
+  const insertComment = useCallback((postFlag,postId,nickName,comment,submitDay)=>{
 
         if(comment.length === 0 || comment.replace(blank_pattern,'')===""){
  
@@ -65,7 +65,6 @@ const Comments1001 = ({
             alert('300자 이상 입력 할 수 없습니다.'); 
             return; 
         }
-      
         //대댓글 입력
         dispatch({
             type:MAINPOSTS_1001_COMMENTBYCOMMENTINSERT_REQUEST, 
@@ -76,6 +75,7 @@ const Comments1001 = ({
                 commentId,
                 who:userInfo,
                 comment,   
+                submitDay
             }
         }); 
 
@@ -170,6 +170,7 @@ const Comments1001 = ({
                             nickName={nickName} 
                             postId={postId} 
                             userInfo={userInfo}
+                            submitDay={submitDay}
                             insertComment={insertComment}
    
                             ref={ref}           
