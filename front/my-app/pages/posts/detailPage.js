@@ -61,7 +61,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
   },[nickName,postFlag,postId,submitDay]);
 
   //게시글 좋아요, 실어요 버튼
-  const postLikeBtn = useCallback((likeFlag)=>{
+  const postLikeBtn = useCallback((likeFlag,submitDay)=>{
 
     if(!userInfo){
       alert('로그인이 필요한 서비스 입니다.'); 
@@ -74,7 +74,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
       return; 
     
     }
-
+    alert(`${submitDay}+submitDay`)
     //게시글 좋아요!
     dispatch({
             type:MAINPOSTS_1001_MAINPOSTLIKE_REQUEST,
@@ -84,6 +84,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
               postFlag,
               who: userInfo, 
               flag:likeFlag, 
+              submitDay,
               mainPosts_1001Info:[...mainPosts_1001Info], 
             }
     }); 
@@ -249,7 +250,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
     {/*좋아요 싫어요 버튼--------------------------------------------------------------------------------*/}
     <div className='divTable'>
       <div className='divTableRowTh' style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-          <Button onClick={()=>postLikeBtn('good')}><LikeTwoTone  twoToneColor={mainPosts_1001Info[0].clicked === 'good' ? "#ff0000":"#1ba640"}/></Button>&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={()=>postLikeBtn('bad')}><DislikeTwoTone twoToneColor={mainPosts_1001Info[0].clicked ==='bad' ? "#ff0000":"#1ba640"}/></Button>
+          <Button onClick={()=>postLikeBtn('good',submitDay)}><LikeTwoTone  twoToneColor={mainPosts_1001Info[0].clicked === 'good' ? "#ff0000":"#1ba640"}/></Button>&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={()=>postLikeBtn('bad',submitDay)}><DislikeTwoTone twoToneColor={mainPosts_1001Info[0].clicked ==='bad' ? "#ff0000":"#1ba640"}/></Button>
       </div>
     </div>
     {/*좋아요 싫어요 버튼--------------------------------------------------------------------------------*/}

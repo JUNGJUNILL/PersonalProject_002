@@ -24,7 +24,7 @@ import custumDateFormat from  '../../util/custumDateFormat';
 
 
 
-const mainPosts_1001 = ({pages,group})=>{
+const mainPosts_1001 = ({})=>{
 
   const dispatch         = useDispatch(); 
   const router           = useRouter(); 
@@ -34,7 +34,7 @@ const mainPosts_1001 = ({pages,group})=>{
 
   /*-------------------------------------------페이징 처리 로직 start-------------------------------------------------------*/
   const [nowPage,setNowPage] = useState(0);                       //현재 페이지
-  const [postsPerPage] = useState(100);                             //한 페이지당 list 수 
+  const [postsPerPage] = useState(5);                             //한 페이지당 list 수 
   const [groupPage , setGroupPage] = useState(5);                 //페이징 그룹 당 수  1~5 , 6~10 , 11~15 ... 5의 배수만 입력가능 
   const [nowGroupPageArray,setNowGroupPageArray] =useState([]);   //현재 페이징 그룹 배열
   
@@ -64,8 +64,10 @@ const mainPosts_1001 = ({pages,group})=>{
   //01.페이지 첫 로드시.. 
   //02.상세 정보 본 후 뒤로 가기 눌렀을 경우 
   //03.페이지 이동 후 뒤로가기 눌렀을 경우
+  const pages=router.query.nowPage ? parseInt(router.query.nowPage) : 1;
+  const group=router.query.group ? parseInt(router.query.group) : 0;  
   useEffect(()=>{
-
+   
       //초기에 groupPage 만큼 배열을 생생해 주어야 한다. 
       let pageArray =Array.from({length: groupPage}, (v, i) => i);
 
@@ -152,17 +154,17 @@ const mainPosts_1001 = ({pages,group})=>{
     );
 }; 
 
-export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+// export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
   
 
-  console.log('첫 로드시 SSR 아니냐?'); 
-  const pages = context.query.nowPage; 
-  const group  =  context.query.group ? parseInt(context.query.group) : 0;   
-                                            // 0;//parseInt(context.query.group);
-  return {
-      props: {pages,group}, // will be passed to the page component as props
-    } 
+//   console.log('첫 로드시 SSR 아니냐?'); 
+//   const pages = context.query.nowPage; 
+//   const group  =  context.query.group ? parseInt(context.query.group) : 0;   
+//                                             // 0;//parseInt(context.query.group);
+//   return {
+//       props: {pages,group}, // will be passed to the page component as props
+//     } 
 
-});
+// });
 
 export default mainPosts_1001; 

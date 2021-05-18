@@ -251,19 +251,29 @@ router.post('/mainPosts_1001Like', async (req,res,next)=>{
                 nickName,
                 postFlag,
                 who,
-                flag
-        } = req.body.data; 
-        let stringQuery = `SELECT mainpostLikeDislikeFlag('${postFlag}','${postId}','${nickName}','${who}')`;
-        const data = await pool.query(stringQuery); 
+                flag,
+                submitDay,} = req.body.data; 
         
-        if(data[0][Object.keys(data[0])] === 'N'){
+        
+        let stringQuery = 'CALL US_SELECT_mainPostLikeDislike'; 
+        stringQuery =stringQuery.concat(`('${postFlag}',`);
+        stringQuery =stringQuery.concat(`'${postId}',`); 
+        stringQuery =stringQuery.concat(`'${nickName}',`); 
+        stringQuery =stringQuery.concat(`'${who}',`); 
+        stringQuery =stringQuery.concat(`'${submitDay}')`);
+        console.log(stringQuery); 
+        const mainPosts_1001LikeDislike = await pool.query(stringQuery); 
+        
+        if(mainPosts_1001LikeDislike[0][0].flag=== "N"){
             stringQuery=''; 
             stringQuery = 'CALL US_INSERT_mainPostsLikeDislike'
             stringQuery =stringQuery.concat(`('${postId}',`);
             stringQuery =stringQuery.concat(`'${nickName}',`); 
             stringQuery =stringQuery.concat(`'${postFlag}',`); 
             stringQuery =stringQuery.concat(`'${who}',`); 
-            stringQuery =stringQuery.concat(`'${flag}')`);
+            stringQuery =stringQuery.concat(`'${flag}',`); 
+            stringQuery =stringQuery.concat(`'${submitDay}')`);
+            console.log(stringQuery);
             await pool.query(stringQuery); 
     
         }
