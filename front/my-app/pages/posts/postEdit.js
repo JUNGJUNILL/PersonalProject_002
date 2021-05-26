@@ -1,14 +1,22 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { useRouter } from 'next/router'
+import wrapper from '../../store/configureStore';
 import {PictureOutlined,PlaySquareOutlined,CloseOutlined} from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux';
+import {END} from 'redux-saga'; 
+import axios from  'axios'; 
 import {Button, Input,} from 'antd'
+
 import 
     {
         UPLOAD_IMAGES_REQUEST
     } 
 from '../../reducers/mainPosts_1001';
-
+import 
+    {
+        LOAD_USER_REQUEST,
+    } 
+from '../../reducers/auth'; 
 import 
     {
         EMP_INSERT_REQUEST,
@@ -37,7 +45,14 @@ const postEdit = () =>{
     const [content,setContent] = useState('');
     const [imageCount,setImageCount]= useState([]); 
   
-    
+    useEffect(()=>{
+        
+        //로그인 만료 시 로그인 창으로 이동 
+        if(!userInfo){
+            router.push('/auth/login'); 
+        }
+
+    },[!userInfo])
 
 
     //제목 입력
@@ -71,7 +86,7 @@ const postEdit = () =>{
                 contentImages =contentImages +  `<figure ><img src="http://localhost:3095/1001/${userInfo}/${v}"></figure>`
             }); 
         }
-        console.log('postInserting=>', postInserting); 
+
         dispatch({
             type: EMP_INSERT_REQUEST,
             data: {content:encodeURI(content),
@@ -185,5 +200,24 @@ const postEdit = () =>{
     )
 
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+
+    const cookie = context.req ? context.req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+    if (context.req && cookie) { //쿠키 공유 방지 
+        axios.defaults.headers.Cookie = cookie;
+    }
+  
+    //로그인 정보 유지 
+    context.store.dispatch({
+        type:LOAD_USER_REQUEST
+    });
+
+    context.store.dispatch(END); 
+    await context.store.sagaTask.toPromise(); 
+
+});
+
 
 export default postEdit; 

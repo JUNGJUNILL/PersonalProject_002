@@ -15,7 +15,7 @@ import wrapper from '../store/configureStore';
 const AppLayOut = ({children}) =>{
     const dummyList = ['자유 게시판','유머','정보','취업','핫딜','미국','일본','중국','동남아','유럽','호주','기타']; 
     const { SubMenu } = Menu;
-   
+   // const router   =useRouter(); 
     const dispatch = useDispatch(); 
     const {userInfo, joined} = useSelector((state)=>state.auth); 
 
@@ -65,6 +65,7 @@ const AppLayOut = ({children}) =>{
     const gotoHome = () =>{
         Router.push('/'); 
     }
+    
 
     
     return(
@@ -77,7 +78,7 @@ const AppLayOut = ({children}) =>{
   
         <header className="hd">
         <h1 className="h1">
-        <img src="http://localhost:3095/koielogo.jpg" style={{width:"111",height:"28",justifyContent:"left"}}></img>
+       <img src="http://localhost:3095/koielogo.jpg" style={{width:"111",height:"28",justifyContent:"left"}} onClick={gotoHome}></img>
 	    </h1>
 
         <div className="fr" style={{marginRight:"-5px"}}>

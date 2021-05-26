@@ -31,10 +31,10 @@ const Login = ()=>{
     const [id,setId] = useState(''); 
     const [password, setPassword] = useState('');
 
-   
-    // useEffect(()=>{
-    //     Kakao.init('71a70e1c6ee55af30c3f9ec51fd7dcb7'); 
-    // },[]); 
+    //카카오 로그인
+    useEffect(()=>{
+        Kakao.init('71a70e1c6ee55af30c3f9ec51fd7dcb7'); 
+    },[]); 
 
     //일반 로그인, 
     const onSubmit = useCallback((e)=>{

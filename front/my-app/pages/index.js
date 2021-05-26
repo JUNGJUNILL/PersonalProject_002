@@ -13,9 +13,7 @@ import wrapper from '../store/configureStore';
 
 const Home =()=>{
 
-  useEffect(()=>{
-    Kakao.init('71a70e1c6ee55af30c3f9ec51fd7dcb7'); 
-  },[]); 
+
 
   return (
     <div>
@@ -36,9 +34,7 @@ const Home =()=>{
 
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-
    const cookie = context.req ? context.req.headers.cookie : '';
-   console.log('context.req.headers.cookie==> ', context.req.headers.cookie)
    axios.defaults.headers.Cookie = '';
    if (context.req && cookie) { //쿠키 공유 방지 
      axios.defaults.headers.Cookie = cookie;

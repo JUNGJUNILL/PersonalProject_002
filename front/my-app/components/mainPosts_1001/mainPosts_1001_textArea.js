@@ -46,10 +46,14 @@ return (
       {comment ? comment.length  : 0 } &#47; 300
     </div>
 
-    {userInfo && 
+    {userInfo && comment.length > 
+        0 
+        ?
         <div style={{margin:"1%",display:"block",float:"right"}}>
             <Button type="primary" loading={isWriting} onClick={()=>insertComment(postFlag,postId,nickName,comment,submitDay)}>댓글달기</Button>
         </div>
+        :
+        ""
     }
 
 
