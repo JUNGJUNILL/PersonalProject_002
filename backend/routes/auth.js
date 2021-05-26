@@ -4,23 +4,53 @@ const {isLoggedIn , vertifiyToken} = require('./middlewares')
 const bcrypt = require('bcrypt');
 const pool = require('../DataBaseInfo');
 const jwt = require('jsonwebtoken'); 
+const axios = require('axios'); 
+var qs = require('querystring');
 const router = express.Router();
 
 
 
 //유저정보 유지 
-router.get('/',vertifiyToken,(req,res)=>{
+router.get('/',async (req,res)=>{
     try{
+        //req.decoded 토큰 정보 저장 
+        //req.user    세션정보 저장(일반 로그인)
+
+        //로그인 했을 경우 
         
-        const userInfo = req.decoded; //req.decoded 토큰 정보 저장 
-                                      //req.user    세션정보 저장(일반 로그인)
-        if(userInfo){
-            console.log('userInfo==>' ,userInfo); 
-            return res.json(userInfo); 
+        let userResponse; 
+
+        //카카오 로그인
+        if(req.cookies[process.env.KAKAO_COOKIE]){
+            console.log('카카오 로그인'); 
+            const kakaoToken=req.cookies[process.env.KAKAO_COOKIE]; 
+            userResponse = await axios({
+                method: "GET",
+                url: "https://kapi.kakao.com/v2/user/me",
+                headers: {
+                  Authorization: `Bearer ${kakaoToken}`
+                }
+              });
+            return res.json({nick:userResponse.data.properties.nickname,loginType:'kakao'}); 
         }
+
+        //jwt 로그인
+        //토큰으로만 검증하기 때문에 서버 부하를 줄일 수 있지 않을까?
+        if(req.cookies[process.env.COOKIE_SECRET]){
+            req.decoded = jwt.verify(req.cookies[process.env.COOKIE_SECRET],process.env.JWT_SECRET); 
+            console.log('jwt로그인'); 
+            return res.json({nick:req.decoded,loginType:'local'}); 
+        
+        //로그인 안했을 경우 
+        }else{
+            console.log('로그인 안함')
+            return res.json({nick:null,loginType:null}); 
+        }
+       
     }catch(e){
         console.error(e);
-        next(e); 
+        return res.json({nick:null,loginType:null}); 
+        //next(e); 
     }
 }); 
 
@@ -162,30 +192,26 @@ router.get('/kakaoTest',async (req,res,next)=>{
     
     try{
 
+      
+        const kakaotoken = req.query.code;
+        const kakaoAccessToken = await axios({
+            method: "POST",
+            url: 'https://kauth.kakao.com/oauth/token',
+            headers: {
+              "content-type": "application/x-www-form-urlencoded"
+            },
+            data: qs.stringify({
+              grant_type: "authorization_code",
+              client_id: '8cf1ea216775ee5a5ff24a71b855846c',
+              redirect_uri: 'http://localhost:3095/api/auth/kakaoTest',
+              code :kakaotoken,
+            })
+          });
 
-        const kakaotoken = req.query.code; 
-                 //토큰을 쿠키에 저장함.    
-        
-        console.log('kakaotoken',kakaotoken); 
-                      
-        res.cookie(process.env.KAKAO_COOKIE, kakaotoken ,{httpOnly:true,
+          res.cookie(process.env.KAKAO_COOKIE, kakaoAccessToken.data.access_token ,{httpOnly:true,
             secure:false, 
         }); 
-
-
-        return res.redirect('http://captainryan.gonetis.com:3001');
-        //  return res.json({
-             
-        //     code: kakaotoken, 
-        //     message:'토큰이 발급되었습니다.', 
-           
-        // });
-
-     
-
-       
-
-        //res.redirect('http://captainryan.gonetis.com:3001/');
+          return res.redirect('http://localhost:3001');
 
     }catch(e){
         console.error(e)

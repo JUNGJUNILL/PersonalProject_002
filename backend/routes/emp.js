@@ -154,11 +154,12 @@ router.get('/', async (req,res,next)=>{
 router.post('/empInsert', async (req,res,next)=>{
 
   try{
-      const {content,title,userNickName} = req.body.data; 
+      const {content,title,userNickName,postFlag,contentImages} = req.body.data; 
       const _title   = decodeURIComponent(title); 
       const _content = decodeURIComponent(content); 
+      const _contentImages = decodeURIComponent(contentImages); 
       const _userNickName   = decodeURIComponent(userNickName); 
-      const _postFlag = "1001"; 
+      const _postFlag = postFlag; 
 
       // let editContent=""; 
       // const str = '<img';
@@ -173,6 +174,7 @@ router.post('/empInsert', async (req,res,next)=>{
       let stringQuery = 'CALL US_INSERT_mainPosts'; 
           stringQuery =stringQuery.concat(`('${_title}',`);
           stringQuery =stringQuery.concat(`'${_content}',`); 
+          stringQuery =stringQuery.concat(`'${_contentImages}',`); 
           stringQuery =stringQuery.concat(`'${_userNickName}',`); 
           stringQuery =stringQuery.concat(`'${_postFlag}')`);
           

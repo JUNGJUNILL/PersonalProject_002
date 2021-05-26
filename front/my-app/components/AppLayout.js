@@ -82,8 +82,9 @@ const AppLayOut = ({children}) =>{
 
         <div className="fr" style={{marginRight:"-5px"}}>
         
-            <Link href={'/auth/login'} ><a className="mu">로그인</a></Link>
-            <Link href={'/auth/join'} ><a className="mu">회원가입</a></Link>
+        {!userInfo ?  <Link href={'/auth/login'} ><a className="mu">로그인</a></Link>: <Link href={'/'} ><a className="mu">로그아웃</a></Link> }
+        {!userInfo ?   <Link href={'/auth/join'} ><a className="mu">회원가입</a></Link>:<Link href={'/'} ><a className="mu">글쓰기</a></Link> } 
+            
 
         </div>
   

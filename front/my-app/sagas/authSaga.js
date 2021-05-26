@@ -1,5 +1,6 @@
 import axios from 'axios'
 import jwtDeCoder from 'jwt-decode'
+//import Kakao from 'kakaojs'; 
 import {all,fork,takeLatest,takeEvery ,put, delay,call} from 'redux-saga/effects'; 
 import 
     {JOIN_REQUEST,
@@ -29,12 +30,12 @@ function* sagaLoadUser(action){
 
     try{
 
-        const result = yield call(APILoadUser,action.data);
-        console.log('데이타!!==>' + result.data.nick) 
-    
+        const result = yield call(APILoadUser,action.data);    
+        const nick = result.data.nick;
+        const loginType = result.data.loginType; 
         yield put({
                 type:LOAD_USER_SUCCESS, 
-                data: result.data.nick,           
+                data: {nickName: nick,loginTyle:loginType},           
         }); 
 
     }catch(e){
@@ -59,7 +60,6 @@ function* watchLoadUser(){
 //회원가입 사이클 
 //------------------------------------------------------------------------
 function APIJoin(data){
-    console.log('data==>' , data); 
     return axios.post('/auth/join',{data},{withCredentials:true}); 
 
 }
@@ -162,45 +162,24 @@ function* sagaLogin(action){
 
         let result; 
         let decoded;
+        //jwt 로그인
         if(action.data.loginType==='local'){
             
             result = yield call(APILogin,action.data); 
-            console.log('result.data.token==>' , result.data.token); 
             decoded =jwtDeCoder(result.data.token); 
             yield put({
                 type:LOGIN_SUCCESS,
-                data:decoded.nick,
+                data:{nickName: decoded.nick,loginTyle:'local'},   
             }); 
-
-        }else if(action.data.loginType==='kakao'){
-
-            result = yield call(APILoginKakao); 
-            decoded =result.data;
-            yield put({
-                type:LOGIN_SUCCESS,
-                data:decoded.nick,
-            }); 
-
+        //카카오 로그인
         }else{
             if(Kakao.isInitialized()){
-                    console.log('Kakao.isInitialized()=>>',Kakao.isInitialized())
                     Kakao.Auth.authorize({
                         
-                        redirectUri:'http://captainryan.gonetis.com:3095/api/auth/kakaoTest',
-                        //redirectUri:'/auth/kakao/',
-                        
-                        success : function(authObj){
-                            console.log('성공이야!==>', authObj); 
-                        }
-
+                        redirectUri:'http://localhost:3095/api/auth/kakaoTest',
                     });
             }
-            result = yield call(APILoginKakao); 
-            decoded =result.data;
-            yield put({
-                type:LOGIN_SUCCESS,
-                data:decoded.nick,
-            }); 
+    
         }
         
                                

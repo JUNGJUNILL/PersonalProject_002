@@ -12,6 +12,7 @@ from '../../reducers/auth';
 import { useRouter } from 'next/router';
 import {Button,Input} from 'antd'
 
+
 const DiveWrapper = styled.div`
 margin-top : 5%; 
 margin-bottom:5%
@@ -31,9 +32,9 @@ const Login = ()=>{
     const [password, setPassword] = useState('');
 
    
-    useEffect(()=>{
-        Kakao.init('71a70e1c6ee55af30c3f9ec51fd7dcb7'); 
-    },[]); 
+    // useEffect(()=>{
+    //     Kakao.init('71a70e1c6ee55af30c3f9ec51fd7dcb7'); 
+    // },[]); 
 
     //일반 로그인, 
     const onSubmit = useCallback((e)=>{
@@ -125,7 +126,7 @@ const Login = ()=>{
             <ButtonWrapper type="primary" onClick={onSubmit} loading={isLogining} block>로그인</ButtonWrapper>
             <ButtonWrapper onClick={kakaoLogin} block>카카오 로그인 리디렉트</ButtonWrapper>
             <ButtonWrapper onClick={kakaoLoginPopup} block>카카오 로그인 팝업</ButtonWrapper>
-            <ButtonWrapper type="link" block><Link href={{path:'http://captainryan.gonetis.com:3095/api/auth/kakao'}}><a>카카오 로그인</a></Link></ButtonWrapper>
+            <ButtonWrapper type="link" block><Link href={{path:'http://localhost:3095/api/auth/kakao'}}><a>카카오 로그인</a></Link></ButtonWrapper>
         </>
     )
 

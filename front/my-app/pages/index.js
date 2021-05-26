@@ -3,26 +3,20 @@ import Link from 'next/link'
 import React,{useEffect}from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import axios from  'axios'; 
+import {END} from 'redux-saga'; 
 import 
-    {SAVE_IP_ADRESS_REQUEST,} 
-    from '../reducers/testReducer'; 
+    {LOAD_USER_REQUEST,} 
+    from '../reducers/auth'; 
 
 import AppLayout from '../components/AppLayout';
 import wrapper from '../store/configureStore';
 
-const Home =({ip,result})=>{
+const Home =()=>{
 
-  const dispatch = useDispatch(); 
-  //const {clientIp} = useSelector((state)=>state.testReducer);
+  useEffect(()=>{
+    Kakao.init('71a70e1c6ee55af30c3f9ec51fd7dcb7'); 
+  },[]); 
 
-  // useEffect(()=>{
-
-  //   dispatch({type:SAVE_IP_ADRESS_REQUEST,
-  //             data:ip,
-  //   });
-
-  // },[]); 
-  console.log('clientIp==>',ip,'    result=>', result); 
   return (
     <div>
      <Link href="/posts/first-post-Server-side"><a>go to first-page-Server-side</a></Link>
@@ -42,13 +36,22 @@ const Home =({ip,result})=>{
 
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  
-  const ip ='1111';//context.req.headers['x-real-ip'] || context.req.connection.remoteAddress
-  //const apiResult =await axios.get(`https://ipinfo.io/${ip}?token=ad6b444b39c31e`);
-   const result ='Seoul'; //apiResult.data.region; 
-  return {
-    props:{ip,result},
-  }
+
+   const cookie = context.req ? context.req.headers.cookie : '';
+   console.log('context.req.headers.cookie==> ', context.req.headers.cookie)
+   axios.defaults.headers.Cookie = '';
+   if (context.req && cookie) { //쿠키 공유 방지 
+     axios.defaults.headers.Cookie = cookie;
+   }
+ 
+   context.store.dispatch({
+    type:LOAD_USER_REQUEST
+  });
+
+
+  context.store.dispatch(END); 
+  await context.store.sagaTask.toPromise(); 
+
 
 });
 

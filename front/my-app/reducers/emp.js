@@ -5,6 +5,7 @@ export const  initialState = {
 
     emplist : [], 
     imagePaths : [],
+    postInserting : false,
 
 }
 
@@ -84,6 +85,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
 //게시글 작성 
 //----------------------------------------
             case EMP_INSERT_REQUEST: {
+                draft.postInserting = true; 
                 break; 
             }
 

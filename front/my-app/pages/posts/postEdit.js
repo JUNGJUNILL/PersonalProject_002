@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { useRouter } from 'next/router'
 import {PictureOutlined,PlaySquareOutlined,CloseOutlined} from '@ant-design/icons'
 import { useDispatch, useSelector } from 'react-redux';
 import {Button, Input,} from 'antd'
@@ -6,7 +7,14 @@ import
     {
         UPLOAD_IMAGES_REQUEST
     } 
-from '../../reducers/mainPosts_1001'; 
+from '../../reducers/mainPosts_1001';
+
+import 
+    {
+        EMP_INSERT_REQUEST,
+        TEST_REQUEST
+    } 
+from '../../reducers/emp'; 
 const { TextArea } = Input;
 
 
@@ -16,15 +24,18 @@ const postEdit = () =>{
 
     const dispatch = useDispatch(); 
     const {imageUploading,imageFileName} = useSelector((state)=>state.mainPosts_1001); 
-
+    const {userInfo} = useSelector((state)=>state.auth); 
+    const {postInserting}  = useSelector((state)=>state.emp); 
     const refTitle = useRef(); 
     const refContent = useRef(); 
     const imageInput = useRef();
     const videoInput = useRef(); 
+    const router = useRouter()
 
     const blank_pattern = /^\s+|\s+&/g; 
     const [title,setTtile] = useState(''); 
     const [content,setContent] = useState('');
+    const [imageCount,setImageCount]= useState([]); 
   
     
 
@@ -41,7 +52,7 @@ const postEdit = () =>{
 
     //submit
     const contentSummit = ()=>{
-
+     console.log('imageFileName=>>', imageFileName); 
         if(title.length === 0 || title.replace(blank_pattern,'')===""){
             refTitle.current.focus();  
             alert('제목을 입력 해 주세요'); 
@@ -54,14 +65,40 @@ const postEdit = () =>{
             return; 
         }
 
+        let contentImages=""; 
+        if(imageFileName.length > 0 ){
+            imageFileName.map((v)=>{
+                contentImages =contentImages +  `<figure ><img src="http://localhost:3095/1001/${userInfo}/${v}"></figure>`
+            }); 
+        }
+        console.log('postInserting=>', postInserting); 
+        dispatch({
+            type: EMP_INSERT_REQUEST,
+            data: {content:encodeURI(content),
+                   contentImages :encodeURI(contentImages),
+                   title:encodeURI(title),
+                   userNickName:encodeURI(userInfo), 
+                   postFlag:'1001',
+                   
+           },
+
+       }); 
+
+       router.replace('/posts/mainPosts_1001'); 
     }
 
 
     //이미지 업로드 클릭 
     const onClickImageUpload = useCallback(() =>{
-        imageInput.current.click(); 
+        
+        if(imageFileName.length>=5){
+            alert(`게시물당 이미지는 ${imageFileName.length}장 올릴 수 있습니다.`); 
+            return; 
+        }
 
-    },[imageInput.current]); 
+        imageInput.current.click(); 
+        
+    },[imageInput.current,imageFileName]); 
 
     //비디오 업로드 클릭 
     const onClickVideoUpload = useCallback(() =>{
@@ -94,9 +131,12 @@ const postEdit = () =>{
 
         }); 
         const imageArray = imageFormData.getAll('image');
-        
+        setImageCount(imageCount.concat(imageArray));
+
+        //한번에 5장 이상 올렸을 경우 
         if(imageArray.length > 5){
-            alert('게시물당 이미지는 5장 올릴 수 있습니다.'); 
+            alert('한번에 5장 이상 올릴 수 없습니다.'); 
+            setImageCount([]);
             imageFormData.delete('image'); 
             return; 
         }else{
@@ -104,14 +144,14 @@ const postEdit = () =>{
             dispatch({type:UPLOAD_IMAGES_REQUEST,
                 data:{images:imageFormData,
                      postFlag:'1001',
-                     user:'null',
+                     user:encodeURIComponent(userInfo),
                     },
                 }); 
     
         }
 
 
-    },[]); 
+    },[imageCount]); 
 
     return (
         <div style={{marginTop:'3%'}}>
@@ -125,14 +165,14 @@ const postEdit = () =>{
         <div style={{marginTop:'2%',textAlign:'center'}}>
             <Button onClick={onClickImageUpload} >    <PictureOutlined />    </Button>&nbsp;
             <Button onClick={onClickVideoUpload} >    <PlaySquareOutlined />    </Button>&nbsp;
-            <Button type="primary" onClick={contentSummit} loading={imageUploading}>  submit  </Button>
+            <Button type="primary" onClick={contentSummit} loading={imageUploading | postInserting}>  submit  </Button>
        </div> 
        <br/>
 
        <div style={{textAlign:'center'}}>
             {imageFileName && imageFileName.map((v,i)=>(
                 <div style={{display:'inline-block'}} key={i} >
-                    <img style={{width:'60px',height:'60px'}} src={`http://localhost:3095/1001/null/${v}`} />    
+                    <img style={{width:'60px',height:'60px'}} src={`http://localhost:3095/1001/${userInfo}/${v}`} />    
                     <br/>
                     <Button style={{width:'60px'}}><CloseOutlined /></Button>
                 </div>

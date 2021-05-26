@@ -14,8 +14,8 @@ const upload = multer({
       destination(req, file, done) {
           
         const postFlag= req.query.postFlag;
-        const user= req.query.user;
-
+        const user= decodeURIComponent(req.query.user);
+        
     fs.readdir(`images/${postFlag}/${user}`,(error,files)=>{
         if(error){
             fs.mkdirSync(`images/${postFlag}/${user}`); 
@@ -79,13 +79,13 @@ router.post('/mainPosts_1001Detail', async (req,res,next)=>{
 
             let rowQuery ='CALL US_UPDATE_mainPostsHit'; 
             rowQuery =rowQuery.concat(`('${postId}',`);
-            rowQuery =rowQuery.concat(`'${nickName}',`);
+            rowQuery =rowQuery.concat(`'${decodeURIComponent(nickName)}',`);
             rowQuery =rowQuery.concat(`'${postFlag}',`); 
             rowQuery =rowQuery.concat(`'${submitDay}')`);
             console.log(rowQuery); 
             await pool.query(rowQuery); 
          
-            res.cookie(process.env.HITCOUNT_COOKIE,postId+nickName+postFlag,
+            res.cookie(process.env.HITCOUNT_COOKIE,postId+decodeURIComponent(nickName)+postFlag,
                 {httpOnly:true,
                 secure:false,
             }); 
@@ -95,7 +95,7 @@ router.post('/mainPosts_1001Detail', async (req,res,next)=>{
 
         let stringQuery = 'CALL US_SELECT_mainPostsDetail'; 
             stringQuery =stringQuery.concat(`('${postId}',`);
-            stringQuery =stringQuery.concat(`'${nickName}',`); 
+            stringQuery =stringQuery.concat(`'${decodeURIComponent(nickName)}',`); 
             stringQuery =stringQuery.concat(`'${postFlag}',`);
             stringQuery =stringQuery.concat(`'${who}',`); 
             stringQuery =stringQuery.concat(`'${submitDay}')`);

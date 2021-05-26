@@ -35,17 +35,23 @@ exports.vertifiyToken = (req,res,next) =>{
     
     if(req.cookies[process.env.NOTLOGIN_COOKIE] && !req.cookies[process.env.COOKIE_SECRET] && !req.cookies[process.env.KAKAO_COOKIE]){
       return next(); 
-    }else if(req.cookies[process.env.KAKAO_COOKIE]){
+    }else if(req.cookies[process.env.KAKAO_COOKIE]){//카카로오 로그인 했을 경우 
+      return next(); 
+    }else if(!req.cookies[process.env.COOKIE_SECRET]){//로그인 안했을 경우
+      return next(); 
+    }else if(req.cookies[process.env.COOKIE_SECRET]){//로그인 했을 경우 
+      req.decoded = jwt.verify(req.cookies[process.env.COOKIE_SECRET],process.env.JWT_SECRET); 
       return next(); 
     }
-
-
+    
+  
     //쿠키에 저장된 토큰 유요성 검증 
-    req.decoded = jwt.verify(req.cookies[process.env.COOKIE_SECRET],process.env.JWT_SECRET); 
+    
+    
     return next(); 
 
   }catch(e){
-  
+    console.log('eeeeeeeeeee=>   ',e);
     if(e.name ==='TokenExpiredError'){ //토큰 유효기간 초과
       return res.status(419).send({
         conde:419,

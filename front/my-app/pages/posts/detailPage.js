@@ -11,11 +11,17 @@ import
      MAINPOSTS_1001_COMMENTBYCOMMENT_REQUEST,
      MAINPOSTS_1001_MAINPOSTLIKE_REQUEST
     } 
-from '../../reducers/mainPosts_1001'; 
+from '../../reducers/mainPosts_1001';
+
+import 
+    {LOAD_USER_REQUEST,} 
+from '../../reducers/auth'; 
 
 import {DislikeTwoTone,LikeTwoTone , UserOutlined, FieldTimeOutlined} from '@ant-design/icons'
 import {Button} from 'antd'
 import custumDateFormat from  '../../util/custumDateFormat';
+import axios from  'axios'; 
+import {END} from 'redux-saga'; 
 
 
 
@@ -27,11 +33,11 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
          mainPosts_1001CommentByComments
         } = useSelector((state)=>state.mainPosts_1001); 
 
-  const userInfo      = '1111'; //useSelector((state)=>state.auth);
+  const {userInfo}      = useSelector((state)=>state.auth);
   const ref = createRef(); 
   const blank_pattern = /^\s+|\s+&/g;  
   const [unfoldList,setUnfoldList] = useState('fold'); 
-
+/*
   useEffect(()=>{
     
     //댓글 리스트 
@@ -59,7 +65,7 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
     });
 
   },[nickName,postFlag,postId,submitDay]);
-
+*/
   //게시글 좋아요, 실어요 버튼
   const postLikeBtn = useCallback((likeFlag,submitDay)=>{
 
@@ -229,11 +235,18 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
 
 
 
-    {/*상세 페이지 컨텐츠--------------------------------------------------------------------------------*/}
+    {/*상세 페이지 이미지--------------------------------------------------------------------------------*/}
      <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginTop:"1%"}}>
-        <div dangerouslySetInnerHTML={{__html:mainPosts_1001Info[0].content}}/>
+        <div dangerouslySetInnerHTML={{__html:mainPosts_1001Info[0].contentImages}}/>
      </div> 
-    {/*상세 페이지 컨텐츠--------------------------------------------------------------------------------*/}   
+    {/*상세 페이지 이미지--------------------------------------------------------------------------------*/}
+    
+    
+    {/*상세 페이지 글--------------------------------------------------------------------------------*/}
+    <div>
+        {mainPosts_1001Info[0].content}
+    </div>
+    {/*상세 페이지 글--------------------------------------------------------------------------------*/}
     
 
 
@@ -319,10 +332,50 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
 
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  const postId   = context.query.postId; 
-  const nickName = context.query.nickName; 
-  const postFlag = context.query.postFlag; 
-  const submitDay = context.query.submitDay; 
+  const array = context.query.postId.split(':'); 
+  const postId   = array[0]; 
+  const nickName = array[1]; 
+  const postFlag = array[2]; 
+  const submitDay = array[3];
+  const who       = array[4];
+  const cookie = context.req ? context.req.headers.cookie : '';
+    axios.defaults.headers.Cookie = '';
+    if (context.req && cookie) { //쿠키 공유 방지 
+      axios.defaults.headers.Cookie = cookie;
+    }
+  
+  //로그인 정보 유지 
+  context.store.dispatch({
+    type:LOAD_USER_REQUEST
+  });
+
+
+  //댓글 리스트 
+  context.store.dispatch({
+    type:MAINPOSTS_1001_COMMENTS_REQUEST, 
+    data:{
+      postId,
+      nickName,
+      postFlag,
+      who:who, 
+      submitDay,
+    }
+  }); 
+  
+  //상세 정보 
+  context.store.dispatch({
+        type:MAINPOSTS_1001_DETAIL_INFO_REQUEST, 
+        data:{
+          postId,
+          nickName,
+          postFlag,
+          who:who,
+          submitDay
+        }
+  });
+
+  context.store.dispatch(END); 
+  await context.store.sagaTask.toPromise(); 
   
   return {
       props: {nickName,postFlag,postId,submitDay}, // will be passed to the page component as props
@@ -330,4 +383,4 @@ export const getServerSideProps = wrapper.getServerSideProps(async (context) => 
 
 });
 
-export default detailPage; 
+export default detailPage;

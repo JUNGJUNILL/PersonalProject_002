@@ -90,11 +90,9 @@ const mainPosts_1001 = ({})=>{
 
 
   //게시글 상세 페이지 
-  const gotoDetail = useCallback((postId,userNickName,postFlag,submitDay)=>{
-
-    router.push({pathname:'/posts/detailPage',
-                 query:{postId,nickName:userNickName,postFlag,submitDay},
-              }); 
+  const gotoDetail = useCallback((postId,userNickName,postFlag,submitDay,userInfo)=>{
+     const param=`${postId}:${userNickName}:${postFlag}:${submitDay}:${userInfo}`;
+     router.push(`/posts/detailPage?postId=${param}`); 
   },[]); 
 
 
@@ -110,9 +108,9 @@ const mainPosts_1001 = ({})=>{
 
       <div className="divTable">
             {mainPosts_1001.map((v,i)=>(
-               <div className='divTableRow' onClick={()=>gotoDetail(v.postId,v.userNickName,'1001',v.submitDay)}>
+               <div className='divTableRow' onClick={()=>gotoDetail(v.postId,v.userNickName,'1001',v.submitDay,userInfo)}>
                
-               <div className='divTableImageCell'><div className="divImageCell"><img src={v.content.indexOf(`<img src=`) !== -1 ? v.content.substr(v.content.indexOf(`<img src=`)+`<img src=`.length ,v.content.substring(v.content.indexOf(`<img src=`)+`<img src=`.length).indexOf('>')).split(`"`).join(''):`http://captainryan.iptime.org:3095/noimages.gif`}  /></div></div>
+               <div className='divTableImageCell'><div className="divImageCell"><img src={v.contentImages.indexOf(`<img src=`) !== -1 ? v.contentImages.substr(v.contentImages.indexOf(`<img src=`)+`<img src=`.length ,v.contentImages.substring(v.contentImages.indexOf(`<img src=`)+`<img src=`.length).indexOf('>')).split(`"`).join(''):`http://localhost:3095/noimages.gif`}  /></div></div>
 
                 {/* 
                   <div className='divTableCell'>
@@ -123,7 +121,7 @@ const mainPosts_1001 = ({})=>{
                 */}
 
                   <div className="divTableCell" >    
-                    <Link href={{pathname:'/posts/detailPage' , query:{postId:v.postId,nickName:v.userNickName,postFlag:'1001',submitDay:v.submitDay}}} ><a>
+                    <Link href={`/posts/detailPage?postId=${v.postId}:${v.userNickName}:1001:${v.submitDay}:${userInfo}`}><a>
                   
                     <font size="2">
 
@@ -154,17 +152,5 @@ const mainPosts_1001 = ({})=>{
     );
 }; 
 
-// export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  
-
-//   console.log('첫 로드시 SSR 아니냐?'); 
-//   const pages = context.query.nowPage; 
-//   const group  =  context.query.group ? parseInt(context.query.group) : 0;   
-//                                             // 0;//parseInt(context.query.group);
-//   return {
-//       props: {pages,group}, // will be passed to the page component as props
-//     } 
-
-// });
 
 export default mainPosts_1001; 

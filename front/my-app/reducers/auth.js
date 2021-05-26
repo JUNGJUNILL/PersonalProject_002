@@ -7,6 +7,7 @@ export const  initialState = {
 
     isLogining : false, //로그인 시도 중
     userInfo : null,      //사용자 정보
+    loginTyle:'',         //로그인 타입
 
 
 }
@@ -72,7 +73,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
 
             case LOGIN_SUCCESS :{
                 draft.isLogining = false;               
-                draft.userInfo = action.data; 
+                draft.userInfo = action.data.nickName; 
+                draft.loginTyle = action.data.loginTyle; 
                 break; 
             }
         
@@ -90,7 +92,8 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
             }
 
             case LOAD_USER_SUCCESS :{
-                draft.userInfo = action.data; 
+                draft.userInfo = action.data.nickName; 
+                draft.loginTyle = action.data.loginTyle; 
                 break; 
             }
 
