@@ -17,8 +17,8 @@ import
     {LOAD_USER_REQUEST,} 
 from '../../reducers/auth'; 
 
-import {DislikeTwoTone,LikeTwoTone , UserOutlined, FieldTimeOutlined} from '@ant-design/icons'
-import {Button} from 'antd'
+import {DislikeTwoTone, LikeTwoTone, UserOutlined, FieldTimeOutlined, EyeOutlined} from '@ant-design/icons'
+import {Avatar, Button} from 'antd'
 import custumDateFormat from  '../../util/custumDateFormat';
 import axios from  'axios'; 
 import {END} from 'redux-saga'; 
@@ -212,23 +212,24 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
       
     <div >
     {/*상세 페이지 타이틀--------------------------------------------------------------------------------*/}
-      <div className='divTable' style={{marginTop:'3%'}}>
+      <div className='divTableDetail' style={{marginTop:'3%'}}>
             <div className='divTableRowTh'>
-                <div className='divTableCellTh'>{mainPosts_1001Info[0].title},{mainPosts_1001Info[0].postId} [{mainPosts_1001Comments.length}]</div>
+                <div className='divTableCellTh'><h3><b>{mainPosts_1001Info[0].title},{mainPosts_1001Info[0].postId}</b></h3></div>
            </div>
-           <div className='divTableRow'>
-                <div className='divTableCell'>
-                  <UserOutlined />  {mainPosts_1001Info[0].userNickName}<br />
-                  <FieldTimeOutlined />  {custumDateFormat(mainPosts_1001Info[0].createdDate)}<br />
-                  <LikeTwoTone twoToneColor="#1ba640"/> : {mainPosts_1001Info[0].good} <DislikeTwoTone  twoToneColor="#1ba640"/> : {mainPosts_1001Info[0].bad} 
+           <div className='divTableRowTh'>
+                <div className='divTableCellTh'><Avatar size="small" icon={<UserOutlined />} />&nbsp;{mainPosts_1001Info[0].userNickName}</div>
+           </div>
+           <div className='divTableRowTh'>
+                <div className='divTableCellTh'>
+                <FieldTimeOutlined/>&nbsp;{custumDateFormat(mainPosts_1001Info[0].createdDate)}&nbsp;&nbsp;
+                <EyeOutlined />&nbsp;{mainPosts_1001Info[0].hit}&nbsp;&nbsp;
+                <LikeTwoTone twoToneColor={'#ff6600'} />&nbsp;{mainPosts_1001Info[0].good}&nbsp;&nbsp;
+                <DislikeTwoTone twoToneColor={'#ff6600'} />&nbsp;{mainPosts_1001Info[0].bad}   
                 </div>
            </div>
       </div>
+      <hr style={{opacity:'0.5'}}/>
     {/*상세 페이지 타이틀--------------------------------------------------------------------------------*/}
-
-      <div style={{width:"100%",height:"auto", border:"1px solid", borderColor:"#8cc49c",marginTop:"1%"}}>
-         광고입니다.
-      </div>
    
 
 
@@ -261,11 +262,12 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
 
 
     {/*좋아요 싫어요 버튼--------------------------------------------------------------------------------*/}
-    <div className='divTable'>
+    <div className='divTableDetail'>
       <div className='divTableRowTh' style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
-          <Button onClick={()=>postLikeBtn('good',submitDay)}><LikeTwoTone  twoToneColor={mainPosts_1001Info[0].clicked === 'good' ? "#ff0000":"#1ba640"}/></Button>&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={()=>postLikeBtn('bad',submitDay)}><DislikeTwoTone twoToneColor={mainPosts_1001Info[0].clicked ==='bad' ? "#ff0000":"#1ba640"}/></Button>
+          <Button onClick={()=>postLikeBtn('good',submitDay)}><LikeTwoTone  twoToneColor={mainPosts_1001Info[0].clicked === 'good' ? "#ff0000":"#ff6600"}/></Button>&nbsp;&nbsp;&nbsp;&nbsp;<Button onClick={()=>postLikeBtn('bad',submitDay)}><DislikeTwoTone twoToneColor={mainPosts_1001Info[0].clicked ==='bad' ? "#ff0000":"#ff6600"}/></Button>
       </div>
     </div>
+    <br />
     {/*좋아요 싫어요 버튼--------------------------------------------------------------------------------*/}
 
 
@@ -273,7 +275,8 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
 
 
     {/*댓글 입력--------------------------------------------------------------------------------*/}
-   <CommentTextArea   
+    <div><b>댓글 {mainPosts_1001Comments.length}</b></div>
+    <CommentTextArea   
             postFlag={postFlag} 
             nickName={nickName} 
             postId={postId} 
@@ -288,7 +291,6 @@ const detailPage  = ({nickName,postFlag,postId,submitDay}) =>{
 
 
     {/*댓글 리스트--------------------------------------------------------------------------------*/}
-
     <div className="divTable">
       {mainPosts_1001Comments && mainPosts_1001Comments.map((v,i)=>
 

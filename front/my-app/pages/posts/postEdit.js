@@ -159,7 +159,7 @@ const postEdit = () =>{
             dispatch({type:UPLOAD_IMAGES_REQUEST,
                 data:{images:imageFormData,
                      postFlag:'1001',
-                     user:encodeURIComponent(userInfo),
+                     user:encodeURI(userInfo),
                     },
                 }); 
     

@@ -150,6 +150,15 @@ http://www.daks.me/try.php?filename=trycss3_pagination5.php
   table-layout: fixed;/*20210428 추가*/
 }
 
+.divTableDetail{
+  display: table;
+  width: 100%;
+  margin-top: 3%;
+ 
+
+  table-layout: fixed;/*20210428 추가*/
+}
+
 .divTableRow {
   display: table-row;
   height: 80%;
@@ -177,6 +186,19 @@ div.divTableRow:hover {
 
 }
 
+.divTableCellDetail {
+
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 1.5%;
+  padding-bottom: 0.2%;
+  padding-top: 0.2%;
+  border-bottom: 1px solid #a0a0a0;
+  word-wrap: break-word;
+
+
+}
+
 .divTableCell02 {
 
   display: table-cell;
@@ -196,10 +218,10 @@ div.divTableRow:hover {
 /* rgb(168, 230, 186);*/
 .divTableRowTh {
   display: table-row;
-  background-color: rgb(140, 196, 156);
-  height: 50px;
+ 
+  height: 35px;
   width: 100%;
-  border-bottom: 1px solid #a0a0a0;
+  /*border-bottom: 1px solid #a0a0a0;*/
 }
 
 .divTableCellTh {
@@ -259,12 +281,6 @@ width와 height를 동일하게 지정해 주어야 한다.
 /*DivTable.com div로 테이블 만들기 */
 
 
-.demo-editor {
-  height: 500px !important;
-  border: 1px solid #F1F1F1 !important;
-  padding: 5px !important;
-  border-radius: 2px !important;
-}
 
 /*이미지를 반응형으로 하기 위하여 img 테그는 전체다 이렇게..*/
 img {
@@ -294,11 +310,6 @@ img {
   text-align: center;
   height: 30px;
 
-}
-
-
-.ck-editor__editable {
-  min-height: 400px;
 }
 
 

@@ -6,6 +6,7 @@ const pool = require('../DataBaseInfo');
 const jwt = require('jsonwebtoken'); 
 const axios = require('axios'); 
 var qs = require('querystring');
+const { Console } = require('console');
 const router = express.Router();
 
 
@@ -20,9 +21,17 @@ router.get('/',async (req,res)=>{
         
         let userResponse; 
 
-        //카카오 로그인
-        if(req.cookies[process.env.KAKAO_COOKIE]){
-            console.log('카카오 로그인'); 
+        
+        //jwt 로그인
+        //토큰으로만 검증하기 때문에 서버 부하를 줄일 수 있지 않을까?
+        if(req.cookies[process.env.COOKIE_SECRET]){
+            console.log('jwt login'); 
+            req.decoded = jwt.verify(req.cookies[process.env.COOKIE_SECRET],process.env.JWT_SECRET); 
+            return res.json({nick:req.decoded,loginType:'local'}); 
+
+        //카카오 로그인    
+        }else if(req.cookies[process.env.KAKAO_COOKIE]){
+            console.log('kakao login'); 
             const kakaoToken=req.cookies[process.env.KAKAO_COOKIE]; 
             userResponse = await axios({
                 method: "GET",
@@ -32,18 +41,40 @@ router.get('/',async (req,res)=>{
                 }
               });
             return res.json({nick:userResponse.data.properties.nickname,loginType:'kakao'}); 
-        }
-
-        //jwt 로그인
-        //토큰으로만 검증하기 때문에 서버 부하를 줄일 수 있지 않을까?
-        if(req.cookies[process.env.COOKIE_SECRET]){
-            req.decoded = jwt.verify(req.cookies[process.env.COOKIE_SECRET],process.env.JWT_SECRET); 
-            console.log('jwt로그인'); 
-            return res.json({nick:req.decoded,loginType:'local'}); 
         
-        //로그인 안했을 경우 
+        //네이버 로그인
+        }else if(req.cookies[process.env.NAVER_COOKIE]){
+            //https://developers.naver.com/docs/login/profile/profile.md
+            console.log('naver login'); 
+            const naverToken = req.cookies[process.env.NAVER_COOKIE];
+            userResponse = await axios({
+                method: "GET",
+                url: "https://openapi.naver.com/v1/nid/me",
+                headers: {
+                    Authorization: `Bearer ${naverToken}`
+                    
+                    
+                }
+              });
+
+            return res.json({nick:userResponse.data.response.nickname,loginType:'naver'}); 
+  
+        //페이스북 로그인
+        }else if(req.cookies[process.env.FACEBOOK_COOKIE]){
+            console.log('facebook login')
+            const facebookToken = req.cookies[process.env.FACEBOOK_COOKIE]; 
+            userResponse = await axios({
+                method: "GET",
+                url: `https://graph.facebook.com/debug_token?input_token=${facebookToken}&access_token=1145587049279696|cec98856baf4b9d9bcbc2844855b2a26`,
+       
+              });
+              
+              const {data} = userResponse;
+              return res.json({nick:data.data.user_id,loginType:'facebook'});
+
+        //로그인 안함
         }else{
-            console.log('로그인 안함')
+            console.log('not login')
             return res.json({nick:null,loginType:null}); 
         }
        
@@ -188,6 +219,7 @@ router.post('/login',async (req,res,next)=>{
 
 });
 
+//카카오 로그인
 router.get('/kakaoTest',async (req,res,next)=>{
     
     try{
@@ -217,17 +249,83 @@ router.get('/kakaoTest',async (req,res,next)=>{
         console.error(e)
     }
 
-})
+}); 
 
 
-//카카오 로그인 
-router.get('/kakao',passport.authenticate('kakao')); 
-router.get('/kakao/callback',passport.authenticate(
-                                                    'kakao',
-                                                    {failureRedirect:'/',}),
-                                                    (req,res)=>{
-                                                        res.redirect('/'); 
-                                                       }); 
+
+
+//네이버 로그인
+router.get('/naverLoginCallback',async (req,res,next)=>{
+
+    try{
+        const client_id = 'FQxK6vBp2RiL0gne54KV';
+        const client_secret = 'V6rGNwgrBK';
+        const redirectURI = encodeURI("http://localhost:3095/api/auth/naverLoginCallback");
+        const code  = req.query.code; 
+        const state = req.query.state;
+
+        const api_url = 'https://nid.naver.com/oauth2.0/token?grant_type=authorization_code&client_id='
+        + client_id + '&client_secret=' + client_secret + '&redirect_uri=' + redirectURI + '&code=' + code + '&state=' + state;
+        const response = await axios({
+            method: "GET",
+            url: api_url,
+            headers: {
+                'X-Naver-Client-Id':client_id, 'X-Naver-Client-Secret': client_secret
+            }
+          });
+
+        const naverAccessToken = response.data.access_token;
+
+          res.cookie(process.env.NAVER_COOKIE, naverAccessToken,{httpOnly:true,
+            secure:false, 
+        }); 
+
+        return res.redirect('http://localhost:3001');
+
+    }catch(e){
+        console.error(e); 
+    }
+
+}); 
+
+//페이스북 로그인
+router.get('/facebookLogin',async (req,res,next)=>{
+
+    try{        
+        const { data } = await axios({
+            url: 'https://graph.facebook.com/v10.0/oauth/access_token',
+            method: 'GET',
+            params: {
+                client_id: "1145587049279696",
+                redirect_uri: 'http://localhost:3095/api/auth/facebookLogin', 
+                client_secret : 'cec98856baf4b9d9bcbc2844855b2a26',
+                code: req.query.code,
+            },
+        });
+     
+        res.cookie(process.env.FACEBOOK_COOKIE, data.access_token,{httpOnly:true,
+            secure:false, 
+        }); 
+       return res.redirect('http://localhost:3001');
+
+    }catch(e){
+        console.error(e); 
+    }
+
+}); 
+
+//구글 로그인 
+router.get('/googleLogin',async (req,res,next)=>{
+    try{
+
+    }catch(e){
+        console.error(e); 
+    }
+
+}); 
+
+
+
 
 
 //로그아웃 

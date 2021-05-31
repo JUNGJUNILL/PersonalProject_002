@@ -1,5 +1,6 @@
 import React, { useCallback,useEffect, useState, createRef ,forwardRef,useImperativeHandle} from 'react'
-import {Button} from 'antd'
+import {Button,Input} from 'antd'
+const { TextArea } = Input;
 import { useSelector } from 'react-redux';
 
 //forwardRef
@@ -40,8 +41,7 @@ const  CommentTextArea= forwardRef(({postFlag,nickName,postId,userInfo,submitDay
 return (
     <>
   
-    <textarea value={comment} ref={focusRef} style={{width:"100%",height:"80px",marginTop:"3%"}} onChange={onChageComment} placeholder={ userInfo ? "댓글을 작성해 보세요!" : "로그인이 필요한 서비스 입니다."} readOnly={userInfo ? false : true}/>
-   
+    <TextArea value={comment} ref={focusRef} onChange={onChageComment} placeholder={userInfo ? "댓글을 작성해 보세요!" : "댓글 작성(로그인이 필요한 서비스 입니다.)"} readOnly={userInfo ? false : true} />
     <div style={{margin:"1%",display:"block",float:"left"}}>
       {comment ? comment.length  : 0 } &#47; 300
     </div>

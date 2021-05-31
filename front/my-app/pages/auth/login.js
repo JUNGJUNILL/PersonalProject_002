@@ -31,10 +31,6 @@ const Login = ()=>{
     const [id,setId] = useState(''); 
     const [password, setPassword] = useState('');
 
-    //카카오 로그인
-    useEffect(()=>{
-        Kakao.init('71a70e1c6ee55af30c3f9ec51fd7dcb7'); 
-    },[]); 
 
     //일반 로그인, 
     const onSubmit = useCallback((e)=>{
@@ -94,16 +90,13 @@ const Login = ()=>{
                 }
             })
     }
-
-    function kakaoLogin(){
+    const SNSLogin = (kind)=>{
 
         dispatch({type:LOGIN_REQUEST,
             data: {
-
-              loginType:'sdk', 
+              loginType:kind, 
             }
          }); 
- // router.push({pathname:'/'});
     }
 
 
@@ -124,7 +117,12 @@ const Login = ()=>{
            
      
             <ButtonWrapper type="primary" onClick={onSubmit} loading={isLogining} block>로그인</ButtonWrapper>
-            <ButtonWrapper onClick={kakaoLogin} block>카카오 로그인 리디렉트</ButtonWrapper>
+            <ButtonWrapper onClick={()=>SNSLogin('kakao')} block>카카오 로그인 리디렉트</ButtonWrapper>
+            <Link href="https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=FQxK6vBp2RiL0gne54KV&redirect_uri=http://localhost:3095/api/auth/naverLoginCallback&state=RAMDOM_STATE"><a><img height='50' src='http://static.nid.naver.com/oauth/small_g_in.PNG'/></a></Link>
+            <ButtonWrapper onClick={()=>SNSLogin('naver')} block>네이버 로그인</ButtonWrapper>
+            <Link href="https://www.facebook.com/v10.0/dialog/oauth?client_id=1145587049279696&redirect_uri=http://localhost:3095/api/auth/facebookLogin&state=200"><a>페이스북 로그인</a></Link>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+
             <ButtonWrapper onClick={kakaoLoginPopup} block>카카오 로그인 팝업</ButtonWrapper>
             <ButtonWrapper type="link" block><Link href={{path:'http://localhost:3095/api/auth/kakao'}}><a>카카오 로그인</a></Link></ButtonWrapper>
         </>

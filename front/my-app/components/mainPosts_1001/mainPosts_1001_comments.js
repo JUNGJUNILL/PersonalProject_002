@@ -2,10 +2,10 @@ import React, { useCallback,useEffect, useState, createRef, memo } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 
 import custumDateFormat from  '../../util/custumDateFormat';
-
+import {Avatar, Button} from 'antd'
 import Comment1001ByComments from './mainPosts_1001_commentByComments'
 import CommentTextArea       from './mainPosts_1001_textArea'
-import {DislikeTwoTone,LikeTwoTone} from '@ant-design/icons'
+import {DislikeTwoTone,LikeTwoTone,UserOutlined} from '@ant-design/icons'
 import 
     {
         MAINPOSTS_1001_COMMENTBYCOMMENTINSERT_REQUEST,
@@ -119,16 +119,16 @@ const Comments1001 = ({
       },[mainPosts_1001CommentByComments])
 
     return (
-        <>
+        <>        
                 <div  className='divTableRow' >
-                    <div  className="divTableCell">        
-                    <b>{who}</b> &nbsp; <small>{custumDateFormat(createdDate)}</small><br/>
-                    {comment}<br />
-                    <a onClick={()=>commentByCommentList(postFlag,nickName,postId,commentId,clickCommentId,unfoldList,submitDay)}>{`댓글[${commentByCommentInsertCommentId===commentId ? commentByCommentCount : byCommentCount}]`   }</a> {commentId}          
+                    <div  className="divTableCellDetail">        
+                    <Avatar size="small" icon={<UserOutlined />} />  <b>{who}</b> &nbsp; <small>{custumDateFormat(createdDate)}</small><br/>
+                    {comment},  {commentId}<br />
+                    <a onClick={()=>commentByCommentList(postFlag,nickName,postId,commentId,clickCommentId,unfoldList,submitDay)}>{`답글[${commentByCommentInsertCommentId===commentId ? commentByCommentCount : byCommentCount}]`   }</a>          
                         <div  style={{marginTop:"1%",display:"block",float:"right"}}>
-                            <LikeTwoTone onClick={()=>likeBtn(commentId,flag,'good',submitDay)} twoToneColor={clickedComponent && likeDislikeflag==='good' ? "#ff0000" : "#1ba640"}/>{clickedComponent && likeDislikeflag==='good' ? parseInt(good)+1:good}
+                            <LikeTwoTone onClick={()=>likeBtn(commentId,flag,'good',submitDay)} twoToneColor={clickedComponent && likeDislikeflag==='good' ? "#ff0000" : "#ff6600"}/>{clickedComponent && likeDislikeflag==='good' ? parseInt(good)+1:good}
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <DislikeTwoTone onClick={()=>likeBtn(commentId,flag,'bad',submitDay)} twoToneColor={clickedComponent && likeDislikeflag==='bad' ? "#ff0000" : "#1ba640"} />{clickedComponent && likeDislikeflag==='bad' ? parseInt(bad)+1:bad}
+                            <DislikeTwoTone onClick={()=>likeBtn(commentId,flag,'bad',submitDay)} twoToneColor={clickedComponent && likeDislikeflag==='bad' ? "#ff0000" : "#ff6600"} />{clickedComponent && likeDislikeflag==='bad' ? parseInt(bad)+1:bad}
                             &nbsp;&nbsp;&nbsp;&nbsp;
                             <br />
                         </div> 

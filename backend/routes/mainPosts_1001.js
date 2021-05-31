@@ -215,6 +215,7 @@ router.post('/mainPosts_1001CommentByCommentInsert', async (req,res,next)=>{
         stringQuery =stringQuery.concat(`'${comment}',`); 
         stringQuery =stringQuery.concat(`'${submitDay}')`);
         await pool.query(stringQuery); 
+        console.log(stringQuery); 
     
         stringQuery=''; 
         stringQuery = 'CALL US_SELECT_mainPostCommentByComments'; 

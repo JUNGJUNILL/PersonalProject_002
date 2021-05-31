@@ -159,9 +159,10 @@ function* sagaLogin(action){
 
 
     try{
-
+        console.log('action.data.loginType==>', action.data.loginType); 
         let result; 
         let decoded;
+
         //jwt 로그인
         if(action.data.loginType==='local'){
             
@@ -171,16 +172,23 @@ function* sagaLogin(action){
                 type:LOGIN_SUCCESS,
                 data:{nickName: decoded.nick,loginTyle:'local'},   
             }); 
+
         //카카오 로그인
-        }else{
+        }else if(action.data.loginType==='kakao'){
+            
+            Kakao.init('71a70e1c6ee55af30c3f9ec51fd7dcb7'); 
             if(Kakao.isInitialized()){
-                    Kakao.Auth.authorize({
-                        
+                    Kakao.Auth.authorize({               
                         redirectUri:'http://localhost:3095/api/auth/kakaoTest',
                     });
-            }
-    
+                }
+
+        //네이버 로그인
+        }else{
+
+            return axios.get('/auth/naverLogin/',{withCredentials:true});
         }
+        
         
                                
 
